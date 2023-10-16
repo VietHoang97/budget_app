@@ -13,16 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('schedule_transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('user_name')->unique();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->string('avatar')->nullable();
+            $table->unsignedInteger('transaction_id');
+            $table->string('frequency');
+            $table->dateTime('next_occurrence');
             $table->timestamps();
+
+            $table->foreign('transaction_id')->references('id')->on('transactions');
         });
     }
 
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('schedule_transactions');
     }
 };
