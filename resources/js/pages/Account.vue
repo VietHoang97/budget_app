@@ -1,18 +1,35 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import AccountModal from "@/components/modalComponents/AccountModal.vue";
+import AccountFormModal from "@/components/modalComponents/Accounts/AccountFormModal.vue";
+import TransferAccount from "@/components/modalComponents/Accounts/TransferAccount.vue";
+import FixedButton from "@/components/FixedButton.vue";
 
 const accounts = ref({});
-const modalActive = ref(true);
+const type = "fa-plus";
+const className = "btn-primary";
+const accountId = ref();
+const editMode = ref(false);
+
 const getAccounts = () => {
     axios.get("/api/accounts").then((res) => {
         accounts.value = res.data;
     });
 };
 
-const showModal = () => {
-    console.log("click");
-    modalActive.value = !modalActive.value;
+// const openForm = (id) => {
+//     accountId.value = id;
+// };
+
+const showModal = ref(false);
+const modalTitle = ref("Tiêu đề Modal");
+const modalContent = ref("Nội dung của modal");
+
+const openForm = () => {
+    showModal.value = true;
+};
+
+const closeModal = () => {
+    showModal.value = false;
 };
 
 onMounted(() => {
@@ -80,7 +97,12 @@ onMounted(() => {
                         >
                     </div>
                     <div class="float-right">
-                        <button class="btn" @click="showModal()">
+                        <button
+                            type="button"
+                            class="btn"
+                            data-toggle="modal"
+                            data-target="#tranferModal"
+                        >
                             <i class="fas fa-sync-alt"></i>
                         </button>
                         <button
@@ -106,7 +128,14 @@ onMounted(() => {
                             <div
                                 class="dropdown-menu dropdown-menu-right dropdown-menu-sm-right"
                             >
-                                <button class="dropdown-item">
+                                <button
+                                    type="button"
+                                    :id="acc.id"
+                                    class="dropdown-item edit"
+                                    @click="openForm(acc.id)"
+                                    data-toggle="modal"
+                                    data-target="#formModal"
+                                >
                                     Edit Account
                                 </button>
                                 <button class="dropdown-item" href="#">
@@ -129,7 +158,15 @@ onMounted(() => {
             </div>
         </div>
     </div>
-    <AccountModal :modal-active="modalActive" />
+    <TransferAccount />
+    <!-- <AccountFormModal :id="accountId" :editMode="editMode" /> -->
+    <AccountFormModal
+        v-if="showModal"
+        :title="modalTitle"
+        :content="modalContent"
+        @close="closeModal"
+    />
+    <FixedButton :quantity="1" :type="type" :class="className" />
 </template>
 
 <style>

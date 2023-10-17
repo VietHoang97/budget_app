@@ -18,3 +18,11 @@
 btn_eye:hover {
     background-color: #eee !important;
 }
+.modal-body {
+    max-height: 400px;
+    overflow-y: scroll;
+}
+.modal-header,
+.modal-footer {
+    border: none;
+}

@@ -395,27 +395,5 @@
                 </div>
             </div>
         </div>
-        <div
-            class="position-fixed"
-            style="right: 0; margin-inline-end: 20px; bottom: 170px"
-        >
-            <button
-                class="btn btn-danger rounded-circle border"
-                style="z-index: 100; height: 3.5rem; width: 3.5rem"
-            >
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        <div
-            class="position-fixed"
-            style="right: 0; margin-inline-end: 20px; bottom: 100px"
-        >
-            <button
-                class="btn btn-success rounded-circle border"
-                style="z-index: 100; height: 3.5rem; width: 3.5rem"
-            >
-                <i class="fas fa-minus"></i>
-            </button>
-        </div>
     </div>
 </template>

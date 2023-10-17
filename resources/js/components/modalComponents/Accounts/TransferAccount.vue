@@ -1,24 +1,24 @@
 <script setup>
-const props = defineProps(["modal-active"]);
+import $ from "jquery";
+const toggleCircle = function (e) {
+    if ($(e.children).attr("class").includes("on")) {
+        $(e.children).removeClass("fa-toggle-on");
+        $(e.children).addClass("fa-toggle-off");
+    } else {
+        $(e.children).removeClass("fa-toggle-off");
+        $(e.children).addClass("fa-toggle-on");
+    }
+};
 </script>
+
 <template>
     <div class="col-md-10 offset-md-1 col-xl-8 offset-xl-2 my-3">
-        <!-- Button trigger modal -->
-        <button
-            type="button"
-            class="btn btn-primary"
-            data-toggle="modal"
-            data-target="#exampleModal"
-        >
-            Open modal
-        </button>
-
         <!-- Modal -->
         <div
             class="modal fade"
-            id="exampleModal"
+            id="tranferModal"
             tabindex="-1"
-            aria-labelledby="exampleModalLabel"
+            aria-labelledby=" tranferModalLabel"
             data-backdrop="static"
             aria-hidden="true"
         >
@@ -26,7 +26,7 @@ const props = defineProps(["modal-active"]);
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title w-100">
-                            <h5 class="text-center" id="exampleModalLabel">
+                            <h5 class="text-center" id=" tranferModalLabel">
                                 Transfer between accounts
                             </h5>
                         </div>
@@ -110,7 +110,7 @@ const props = defineProps(["modal-active"]);
                                 <div class="col-sm-12">
                                     <span
                                         class="btn text-primary"
-                                        onclick="toggleCircle(this)"
+                                        @click="toggleCircle($event)"
                                     >
                                         <i class="fas fa-toggle-on"></i>
                                     </span>
@@ -121,7 +121,7 @@ const props = defineProps(["modal-active"]);
                                 <div class="col-sm-12">
                                     <span
                                         class="btn text-primary"
-                                        onclick="toggleCircle(this)"
+                                        @click="toggleCircle($event)"
                                     >
                                         <i class="fas fa-toggle-on"></i>
                                     </span>
@@ -143,25 +143,3 @@ const props = defineProps(["modal-active"]);
         </div>
     </div>
 </template>
-<!-- <script type="text/javascript">
-toggleCircle = function (e) {
-    if ($(e.children).attr("class").includes("on")) {
-        $(e.children).removeClass("fa-toggle-on");
-        $(e.children).addClass("fa-toggle-off");
-    } else {
-        $(e.children).removeClass("fa-toggle-off");
-        $(e.children).addClass("fa-toggle-on");
-    }
-};
-</script> -->
-
-<style>
-.modal-body {
-    max-height: 300px;
-    overflow-y: scroll;
-}
-.modal-header,
-.modal-footer {
-    border: none;
-}
-</style>
