@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import VueModal from "vue-modal";
 
 const props = defineProps({
     showModal: Boolean,
@@ -89,8 +88,11 @@ watch(
 </script>
 
 <template>
-    <div class="col-md-10 offset-md-1 col-xl-8 offset-xl-2 my-3">
-        <!-- <div
+    <b-modal id="my-modal" title="Modal Title">
+        <!-- Nội dung modal ở đây -->
+        <p>Đây là nội dung của modal</p>
+    </b-modal>
+    <!-- <div
             class="modal fade"
             id="formModal"
             tabindex="-1"
@@ -99,7 +101,7 @@ watch(
             aria-hidden="true"
         >
             <div class="modal-dialog modal-lg"> -->
-        <vue-modal :show="showModal" @close="closeModal">
+    <!-- <vue-modal :show="showModal" @close="closeModal">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title w-100">
@@ -192,8 +194,8 @@ watch(
                     {{ form }}
                 </div>
             </div>
-        </vue-modal>
-    </div>
+        </vue-modal> -->
+    <!-- </div> -->
     <!-- </div>
     </div> -->
 </template>

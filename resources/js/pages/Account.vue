@@ -25,7 +25,8 @@ const modalTitle = ref("Tiêu đề Modal");
 const modalContent = ref("Nội dung của modal");
 
 const openForm = () => {
-    showModal.value = true;
+    const modalRef = AccountFormModal.setup(); // Gọi setup() của component Modal
+    modalRef.show();
 };
 
 const closeModal = () => {
@@ -160,12 +161,7 @@ onMounted(() => {
     </div>
     <TransferAccount />
     <!-- <AccountFormModal :id="accountId" :editMode="editMode" /> -->
-    <AccountFormModal
-        v-if="showModal"
-        :title="modalTitle"
-        :content="modalContent"
-        @close="closeModal"
-    />
+    <AccountFormModal />
     <FixedButton :quantity="1" :type="type" :class="className" />
 </template>
 
