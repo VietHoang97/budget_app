@@ -1,14 +1,15 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import AccountFormModal from "@/components/modalComponents/Accounts/AccountFormModal.vue";
+import { ref, onMounted, onUpdated, reactive } from "vue";
+import { Form } from "vee-validate";
 import TransferAccount from "@/components/modalComponents/Accounts/TransferAccount.vue";
 import FixedButton from "@/components/FixedButton.vue";
 
 const accounts = ref({});
-const type = "fa-plus";
-const className = "btn-primary";
-const accountId = ref();
+const type = { 1: "fa-plus" };
+const className = { 1: "btn-primary" };
 const editMode = ref(false);
+const acc_id = ref(null);
+const currency_arr = ref([]);
 
 const getAccounts = () => {
     axios.get("/api/accounts").then((res) => {
@@ -16,25 +17,66 @@ const getAccounts = () => {
     });
 };
 
-// const openForm = (id) => {
-//     accountId.value = id;
-// };
-
-const showModal = ref(false);
-const modalTitle = ref("Tiêu đề Modal");
-const modalContent = ref("Nội dung của modal");
-
-const openForm = () => {
-    const modalRef = AccountFormModal.setup(); // Gọi setup() của component Modal
-    modalRef.show();
+const openForm = (id) => {
+    editMode.value = true;
+    getEditAccounts(id);
 };
 
-const closeModal = () => {
-    showModal.value = false;
+const closeForm = () => {
+    editMode.value = false;
+};
+
+const form = reactive({
+    name: "",
+    currency: "",
+    balance: "",
+    init_amount: "",
+    notes: "",
+});
+
+const getCurrencies = () => {
+    axios.get("/api/accounts/get-currencies").then((res) => {
+        currency_arr.value = res.data;
+    });
+};
+
+const getEditAccounts = (id) => {
+    if (editMode) {
+        axios.get(`/api/accounts/${id}/edit`).then(({ data }) => {
+            form.name = data.name;
+            form.currency = data.currency;
+            form.init_amount = data.init_amount;
+            form.notes = data.notes;
+            console.log(form);
+        });
+    } else {
+        console.log("create mode");
+        form.value = "";
+    }
+};
+
+const createAccount = () => {
+    console.log("create");
+    axios.post("/api/accounts/create", form).then((res) => {});
+};
+
+const editAccount = () => {
+    console.log("edit");
+    axios.get(`/api/accounts/${props.id}/edit`, form).then((res) => {});
+};
+
+const handleSubmit = () => {
+    console.log("submit");
+    if (editMode) {
+        editAccount();
+    } else {
+        createAccount();
+    }
 };
 
 onMounted(() => {
     getAccounts();
+    getCurrencies();
 });
 </script>
 <template>
@@ -131,7 +173,7 @@ onMounted(() => {
                             >
                                 <button
                                     type="button"
-                                    :id="acc.id"
+                                    ref="editBtn"
                                     class="dropdown-item edit"
                                     @click="openForm(acc.id)"
                                     data-toggle="modal"
@@ -159,10 +201,122 @@ onMounted(() => {
             </div>
         </div>
     </div>
+    <div class="col-md-10 offset-md-1 col-xl-8 offset-xl-2 my-3">
+        <div
+            class="modal fade"
+            id="formModal"
+            tabindex="-1"
+            aria-labelledby="formModalLabel"
+            data-backdrop="static"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title w-100">
+                            <h3 class="text-center" id=" formModalLabel">
+                                <span v-if="editMode">EDIT ACCOUNT</span>
+                                <span v-else>CREATE NEW ACCOUNT</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="modal-body py-1">
+                        <Form @submit="handleSubmit">
+                            <div class="row">
+                                <div class="col-sm-12 my-1">
+                                    <label for="name">Name</label>
+                                    <div class="input-group">
+                                        <input
+                                            v-model="form.name"
+                                            type="text"
+                                            name="name"
+                                            id="name"
+                                            class="form-control"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 my-1">
+                                    <label for="currency"
+                                        >Account currency</label
+                                    >
+                                    <div class="input-group">
+                                        <select
+                                            v-model="form.currency"
+                                            name="currency"
+                                            id="currency"
+                                            class="form-control"
+                                        >
+                                            <option
+                                                v-for="curr in currency_arr"
+                                                :key="curr.id"
+                                                :value="curr.id"
+                                            >
+                                                {{ curr.type }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 my-1">
+                                    <label for="init_amount">
+                                        Init amount
+                                    </label>
+                                    <div class="input-group">
+                                        <input
+                                            v-model="form.init_amount"
+                                            type="number"
+                                            name="init_amount"
+                                            id="init_amount"
+                                            class="form-control"
+                                        />
+                                        <span class="ml-2 mt-2">$</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 my-1">
+                                    <label for="note">Notes</label>
+                                    <div class="input-group">
+                                        <textarea
+                                            v-model="form.notes"
+                                            name="note"
+                                            id="note"
+                                            rows="4"
+                                            class="form-control"
+                                            placeholder="Options"
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </Form>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn"
+                            data-dismiss="modal"
+                            @click="closeForm"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-primary px-4"
+                            @click="abc"
+                        >
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <TransferAccount />
     <!-- <AccountFormModal :id="accountId" :editMode="editMode" /> -->
-    <AccountFormModal />
-    <FixedButton :quantity="1" :type="type" :class="className" />
+    <!-- <AccountFormModal
+        v-if="showModal"
+        :title="modalTitle"
+        :content="modalContent"
+        @close="closeModal"
+    /> -->
+    <FixedButton :quantity="1" :type="type" :btn="className" />
 </template>
 
 <style>

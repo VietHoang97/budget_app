@@ -1,3 +1,17 @@
+<script setup>
+import { ref, onMounted, onUpdated, reactive } from "vue";
+import { Form } from "vee-validate";
+import FixedButton from "@/components/FixedButton.vue";
+
+const type = {
+    1: "fa-minus",
+    2: "fa-plus",
+};
+const buttonClass = {
+    1: "btn-success",
+    2: "btn-danger",
+};
+</script>
 <template>
     <div class="content-header">
         <div class="container-fluid">
@@ -29,9 +43,9 @@
                         <li class="nav-item col p-0">
                             <a
                                 class="nav-link active"
-                                id="nav-home-tab"
+                                id="income-tab"
                                 data-toggle="tab"
-                                href="#nav-home"
+                                href="#nav-income"
                             >
                                 Incomes
                             </a>
@@ -40,9 +54,9 @@
                         <li class="nav-item col p-0">
                             <a
                                 class="nav-link"
-                                id="nav-profile-tab"
+                                id="expense-tab"
                                 data-toggle="tab"
-                                href="#nav-profile"
+                                href="#nav-expense"
                             >
                                 Expense
                             </a>
@@ -65,13 +79,13 @@
                     <div class="tab-content">
                         <div
                             class="tab-pane fade show active"
-                            id="nav-home"
+                            id="nav-income"
                             role="tabpanel"
-                            aria-labelledby="nav-home-tab"
+                            aria-labelledby="income-tab"
                         >
-                            <div>
+                            <div class="item_selector_light">
                                 <a
-                                    class="d-flex justify-content-between py-1 item_selector_light"
+                                    class="d-flex justify-content-between py-1"
                                     href="#st1"
                                     data-toggle="collapse"
                                     aria-expanded="false"
@@ -122,26 +136,28 @@
                                             >
                                                 <button
                                                     class="btn dropdown-item"
+                                                    type="button"
+                                                    ref="editBtn"
+                                                    data-toggle="modal"
+                                                    data-target="#formRepeatModal"
                                                 >
                                                     Repeat now
                                                 </button>
                                                 <button
                                                     class="btn dropdown-item"
+                                                    type="button"
+                                                    ref="editBtn"
+                                                    data-toggle="modal"
+                                                    data-target="#formSkipModal"
                                                 >
                                                     Skip repetition
                                                 </button>
                                                 <button
                                                     class="btn dropdown-item"
-                                                >
-                                                    Duplicate transaction
-                                                </button>
-                                                <button
-                                                    class="btn dropdown-item"
-                                                >
-                                                    Edit transaction
-                                                </button>
-                                                <button
-                                                    class="btn dropdown-item"
+                                                    type="button"
+                                                    ref="editBtn"
+                                                    data-toggle="modal"
+                                                    data-target="#formDeleteScheduleModal"
                                                 >
                                                     Delete transaction
                                                 </button>
@@ -170,9 +186,9 @@
 
                         <div
                             class="tab-pane fade show"
-                            id="nav-profile"
+                            id="nav-expense"
                             role="tabpanel"
-                            aria-labelledby="nav-profile-tab"
+                            aria-labelledby="expense-tab"
                         >
                             <a
                                 class="d-flex justify-content-between py-1 item_selector_light"
@@ -258,7 +274,7 @@
                         </div>
 
                         <div
-                            class="tab-pane fade show active"
+                            class="tab-pane fade show"
                             id="nav-contact"
                             role="tabpanel"
                             aria-labelledby="nav-contact-tab"
@@ -376,6 +392,318 @@
             </div>
         </div>
     </div>
+    <div
+        class="modal fade"
+        id="formRepeatModal"
+        tabindex="-1"
+        aria-labelledby="formRepeatModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formRepeatModalLabel">
+                        REPEAT NOW
+                    </h5>
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Anticipate the next repetition?</p>
+                    <p>
+                        <del>31/10/2023</del> &ensp;
+                        <i class="fas fa-arrow-right"></i> &ensp;
+                        <span>26/10/2023</span>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-primary px-4"
+                        data-dismiss="modal"
+                    >
+                        Back
+                    </button>
+                    <button type="button" class="btn btn-primary px-4">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div
+        class="modal fade"
+        id="formSkipModal"
+        tabindex="-1"
+        aria-labelledby="formSkipModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formSkipModalLabel">
+                        SKIP REPETITION
+                    </h5>
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Skip the next repetition?</p>
+                    <p>
+                        <del>31/10/2023</del> &ensp;
+                        <i class="fas fa-arrow-right"></i> &ensp;
+                        <span>26/10/2023</span>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-primary px-4"
+                        data-dismiss="modal"
+                    >
+                        Back
+                    </button>
+                    <button type="button" class="btn btn-primary px-4">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div
+        class="modal fade"
+        id="formDeleteScheduleModal"
+        tabindex="-1"
+        aria-labelledby="formDeleteScheduleModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formDeleteScheduleModalLabel">
+                        DELETE TRANSACTION
+                    </h5>
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Are you sure you want to delete the scheduled
+                        transaction?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-primary px-4"
+                        data-dismiss="modal"
+                    >
+                        Back
+                    </button>
+                    <button type="button" class="btn btn-danger px-4">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="modal fade"
+        id="formCreateModal"
+        tabindex="-1"
+        aria-labelledby="formCreateModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="offset-4 col-sm-4 text-center">
+                        <h3 class="modal-title" id="formCreateModalLabel">
+                            NEW INCOME
+                        </h3>
+                    </div>
+                    <div class="col-sm-4 text-right">
+                        <button type="button" class="btn">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
+                        <button type="button" class="btn">
+                            <i class="far fa-2x fa-star"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group align-items-center my-2">
+                        <div class="col-sm-1">
+                            <img
+                                class="align-self-center"
+                                src="https://webapp.fastbudget.app/static/icons/ic_blank_grey.svg"
+                                alt="blank icon"
+                            />
+                        </div>
+                        <div class="col-sm-5">
+                            <label for="category">Category</label>
+                            <input
+                                type="text"
+                                name="category"
+                                id="category"
+                                class="form-control"
+                                placeholder="Select category"
+                            />
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="value">Value</label>
+                            <input
+                                type="text"
+                                name="value"
+                                id="value"
+                                class="form-control"
+                            />
+                        </div>
+                    </div>
+                    <div class="input-group align-items-center my-2">
+                        <div class="col-sm-1 mt-2 text-center">
+                            <i class="fas fa-2x fa-university"></i>
+                        </div>
+                        <div class="col-sm-5">
+                            <label for="account">Account</label>
+                            <select
+                                name="account"
+                                id="account"
+                                class="form-control"
+                            >
+                                <option value="1">Wallet</option>
+                                <option value="2">Bank Account</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group align-items-center my-2">
+                        <div class="col-sm-1 mt-2 text-center">
+                            <i class="fas fa-2x fa-calendar-day"></i>
+                        </div>
+                        <div class="col-sm-5">
+                            <label for="date">Date</label>
+                            <input
+                                type="date"
+                                name="date"
+                                id="date"
+                                class="form-control"
+                            />
+                        </div>
+                    </div>
+                    <div class="input-group align-items-center my-2">
+                        <div class="col-sm-1 mt-2 text-center">
+                            <i class="fas fa-2x fa-history"></i>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="repeat"> Repeats every</label>
+                            <input
+                                type="number"
+                                name="repeat"
+                                id="repeat"
+                                class="form-control"
+                            />
+                        </div>
+                        <div class="col-sm-5">
+                            <label for=""></label>
+                            <select
+                                name="account"
+                                id="account"
+                                class="form-control"
+                            >
+                                <option value="1">Days</option>
+                                <option value="2">Weeks</option>
+                                <option value="3">Month</option>
+                                <option value="4">Years</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group align-items-center my-2">
+                        <div class="col-sm-1 mt-2 text-center">
+                            <i class="fas fa-2x fa-redo"></i>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="times">Number of times</label>
+                            <input
+                                type="number"
+                                name="times"
+                                id="times"
+                                class="form-control"
+                            />
+                        </div>
+                        <div class="col-sm-5 d-flex align-items-center">
+                            <span class="form-text text-muted">
+                                Zero times means limitless
+                            </span>
+                        </div>
+                    </div>
+                    <div class="input-group align-items-center my-2">
+                        <div class="col-sm-1 mt-2 text-center">
+                            <i class="far fa-2x fa-user"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            <label for="repeat">From (Optional)</label>
+                            <select name="from" id="from" class="form-control">
+                                <option value="1">Days</option>
+                                <option value="2">Weeks</option>
+                                <option value="3">Month</option>
+                                <option value="4">Years</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group align-items-center my-2">
+                        <div class="col-sm-1 mt-2 text-center">
+                            <i class="fas fa-2x fa-pencil-alt"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            <label for="notes">Notes (Optional)</label>
+                            <textarea
+                                id="notes"
+                                class="form-control"
+                                name="notes"
+                                rows="3"
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn text-success px-4"
+                        data-dismiss="modal"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-success text-uppercase px-4"
+                    >
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <FixedButton :quantity="2" :type="type" :btn="buttonClass" />
 </template>
 <style>
 .nav-option .nav-link {

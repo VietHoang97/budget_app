@@ -14,8 +14,8 @@
     },
     "dependencies": {
         "admin-lte": "^3.2.0",
-        "bootstrap-vue": "^2.23.1",
         "jquery": "^3.7.1",
+        "vee-validate": "^4.11.8",
         "vue": "^3.3.4",
         "vue-loader": "^17.3.0",
         "vue-modal": "^1.0.2",
