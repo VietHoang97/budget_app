@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('schedule_transactions', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('transaction_id');
-            $table->string('frequency');
-            $table->dateTime('next_occurrence');
-            $table->text('notes')->nullable();
-            $table->timestamps();
+        Schema::create('credit_card', function (Blueprint $table) {
+            $table->foreign('account_id')->references('id')->on('accounts');
         });
     }
 
@@ -30,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('schedule_transactions');
+        Schema::table('credit_card', function (Blueprint $table) {
+            $table->dropForeign('account_id');
+        });
     }
 };

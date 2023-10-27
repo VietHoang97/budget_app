@@ -1,40 +1,21 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, reactive, onDeactivated } from "vue";
 
-const props = defineProps({
-    showModal: Boolean,
-    editMode: Boolean,
-});
+const props = defineProps(["form_acc", "editMode"]);
 
-const showModal = ref(false);
-
-const closeModal = () => {
-    showModal.value = false;
-};
-const form = ref({
+const form = reactive({
     name: "",
     currency: "",
     balance: "",
     init_amount: "",
     notes: "",
 });
-const acc_id = ref(null);
 
 const currency_arr = ref([]);
 
 const getCurrencies = () => {
     axios.get("/api/accounts/get-currencies").then((res) => {
         currency_arr.value = res.data;
-    });
-};
-
-const getAccounts = () => {
-    axios.get(`/api/accounts/${props.id}/edit`).then((res) => {
-        form.name = res.data.name;
-        form.currency = res.data.currency;
-        form.init_amount = res.data.init_amount;
-        form.notes = res.data.notes;
-        acc_id.value = res.data.id;
     });
 };
 
@@ -47,7 +28,6 @@ const editAccount = () => {
 };
 
 const handleSubmit = () => {
-    console.log("click", acc_id);
     if (props.editMode) {
         editAccount();
     } else {
@@ -74,34 +54,31 @@ const getExchangeRate = () => {
 
 onMounted(() => {
     getCurrencies();
+    console.log("vao day");
+    console.log(props.form_acc);
     // getExchangeRate();
 });
 
-watch(
-    () => props.id,
-    (newId, oldId) => {
-        if (newId !== oldId) {
-            getAccounts();
-        }
+onDeactivated(() => {
+    console.log("e vao day");
+    console.log(props.form_acc);
+    if (props.editMode) {
+        form = props.form_acc;
+        console.log("check", form);
     }
-);
+});
 </script>
 
 <template>
-    <b-modal id="my-modal" title="Modal Title">
-        <!-- Nội dung modal ở đây -->
-        <p>Đây là nội dung của modal</p>
-    </b-modal>
-    <!-- <div
-            class="modal fade"
-            id="formModal"
-            tabindex="-1"
-            aria-labelledby=" formModalLabel"
-            data-backdrop="static"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog modal-lg"> -->
-    <!-- <vue-modal :show="showModal" @close="closeModal">
+    <div
+        class="modal fade"
+        id="formModal"
+        tabindex="-1"
+        aria-labelledby=" formModalLabel"
+        data-backdrop="static"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title w-100">
@@ -190,12 +167,8 @@ watch(
                     >
                         Save
                     </button>
-
-                    {{ form }}
                 </div>
             </div>
-        </vue-modal> -->
-    <!-- </div> -->
-    <!-- </div>
-    </div> -->
+        </div>
+    </div>
 </template>

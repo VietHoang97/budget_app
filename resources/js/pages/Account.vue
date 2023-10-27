@@ -1,15 +1,24 @@
 <script setup>
 import { ref, onMounted, onUpdated, reactive } from "vue";
 import { Form } from "vee-validate";
-import TransferAccount from "@/components/modalComponents/Accounts/TransferAccount.vue";
+import AccountFormModal from "@/components/modalComponents/Accounts/AccountFormModal.vue";
+import TransferAccount from "@/components/modalComponents/TransferAccount.vue";
 import FixedButton from "@/components/FixedButton.vue";
 
 const accounts = ref({});
+const editMode = ref(false);
+
 const type = { 1: "fa-plus" };
 const className = { 1: "btn-primary" };
-const editMode = ref(false);
-const acc_id = ref(null);
-const currency_arr = ref([]);
+const formID = { 1: "formModal" };
+
+const formAccount = reactive({
+    name: "",
+    currency: "",
+    balance: "",
+    init_amount: "",
+    notes: "",
+});
 
 const getAccounts = () => {
     axios.get("/api/accounts").then((res) => {
@@ -18,65 +27,22 @@ const getAccounts = () => {
 };
 
 const openForm = (id) => {
-    editMode.value = true;
     getEditAccounts(id);
 };
 
-const closeForm = () => {
-    editMode.value = false;
-};
-
-const form = reactive({
-    name: "",
-    currency: "",
-    balance: "",
-    init_amount: "",
-    notes: "",
-});
-
-const getCurrencies = () => {
-    axios.get("/api/accounts/get-currencies").then((res) => {
-        currency_arr.value = res.data;
-    });
-};
-
-const getEditAccounts = (id) => {
+const getEditAccounts = async (id) => {
     if (editMode) {
-        axios.get(`/api/accounts/${id}/edit`).then(({ data }) => {
-            form.name = data.name;
-            form.currency = data.currency;
-            form.init_amount = data.init_amount;
-            form.notes = data.notes;
-            console.log(form);
+        await axios.get(`/api/accounts/${id}/edit`).then(({ data }) => {
+            formAccount.name = data.name;
+            formAccount.currency = data.currency;
+            formAccount.init_amount = data.init_amount;
+            formAccount.notes = data.notes;
         });
-    } else {
-        console.log("create mode");
-        form.value = "";
-    }
-};
-
-const createAccount = () => {
-    console.log("create");
-    axios.post("/api/accounts/create", form).then((res) => {});
-};
-
-const editAccount = () => {
-    console.log("edit");
-    axios.get(`/api/accounts/${props.id}/edit`, form).then((res) => {});
-};
-
-const handleSubmit = () => {
-    console.log("submit");
-    if (editMode) {
-        editAccount();
-    } else {
-        createAccount();
     }
 };
 
 onMounted(() => {
     getAccounts();
-    getCurrencies();
 });
 </script>
 <template>

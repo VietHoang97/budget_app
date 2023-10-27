@@ -14,12 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('schedule_transactions', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('transaction_id');
-            $table->string('frequency');
-            $table->dateTime('next_occurrence');
-            $table->text('notes')->nullable();
-            $table->timestamps();
+            $table->foreign('transaction_id')->references('id')->on('transactions');
         });
     }
 
@@ -30,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('schedule_transactions');
+        Schema::table('schedule_transactions', function (Blueprint $table) {
+            $table->dropForeign('transaction_id');
+        });
     }
 };
