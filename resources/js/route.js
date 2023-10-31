@@ -1,25 +1,38 @@
 import Dashboard from "./components/Dashboard.vue";
+
 import Account from "./pages/Accounts/account.vue";
 import AccountIndex from "./pages/Accounts/accountIndex.vue";
-import accountForm from "./pages/Accounts/accountForm.vue";
+import AccountForm from "./pages/Accounts/accountForm.vue";
+
 import Calendar from "./pages/Calendar.vue";
+
 import budgetIndex from "./pages/Budgets/budgetIndex.vue";
 import Budget from "./pages/Budgets/budget.vue";
-import createBudget from "./pages/Budgets/create.vue";
-import editBudget from "./pages/Budgets/edit.vue";
+import CreateBudget from "./pages/Budgets/create.vue";
+import EditBudget from "./pages/Budgets/edit.vue";
+
 import CategoryChart from "./pages/Charts/CategoryChart.vue";
 import ForecastChart from "./pages/Charts/ForecastChart.vue";
 import FutureTimeChart from "./pages/Charts/FutureTimeChart.vue";
 import TimeChart from "./pages/Charts/TimeChart.vue";
-import CreditCard from "./pages/CreditCard.vue";
+
+import CreditCardIndex from "./pages/CreditCard/creditCardIndex.vue";
+import CreditCard from "./pages/CreditCard/creditCard.vue";
+import CreditCardForm from "./pages/CreditCard/creditCardForm.vue";
+
 import ExportCSV from "./pages/DataTranfer/ExportCSV.vue";
 import ExportPDF from "./pages/DataTranfer/ExportPDF.vue";
 import Import from "./pages/DataTranfer/Import.vue";
+
 import Debts from "./pages/Debts.vue";
+
 import CategoriesManagement from "./pages/Preferences/CategoriesManagement.vue";
 import TransactionManagement from "./pages/Preferences/TransactionManagement.vue";
+
 import Scheduled from "./pages/ScheduledTransactions.vue";
+
 import Setting from "./pages/Setting.vue";
+
 import Transactions from "./pages/Transactions.vue";
 
 export default [
@@ -46,12 +59,12 @@ export default [
             {
                 path: "create",
                 name: "account.create",
-                component: accountForm,
+                component: AccountForm,
             },
             {
                 path: "update/:id",
                 name: "account.update",
-                component: accountForm,
+                component: AccountForm,
             },
             // {
             //     path: "/transfer/:id",
@@ -73,12 +86,12 @@ export default [
             {
                 path: "create",
                 name: "budget.create",
-                component: createBudget,
+                component: CreateBudget,
             },
             {
                 path: "update/:id",
                 name: "budget.update",
-                component: editBudget,
+                component: EditBudget,
             },
         ],
     },
@@ -110,7 +123,24 @@ export default [
     {
         path: "/credit",
         name: "admin.credit",
-        component: CreditCard,
+        component: CreditCardIndex,
+        children: [
+            {
+                path: "",
+                name: "credit.index",
+                component: CreditCard,
+            },
+            {
+                path: "create",
+                name: "credit.create",
+                component: CreditCardForm,
+            },
+            {
+                path: "update/:id",
+                name: "credit.update",
+                component: CreditCardForm,
+            },
+        ],
     },
     {
         path: "/tools/csv/exportCSV",

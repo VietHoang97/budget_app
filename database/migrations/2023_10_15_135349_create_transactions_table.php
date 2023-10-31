@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
+            $table->id();
             $table->unsignedInteger('account_id');
             $table->unsignedInteger('category_id');
             $table->dateTime('date');
