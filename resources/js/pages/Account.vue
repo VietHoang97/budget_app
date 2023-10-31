@@ -1,15 +1,17 @@
 <script setup>
 import { ref, onMounted, onUpdated, reactive } from "vue";
 import { Form } from "vee-validate";
+import AccountFormModal from "../components/modalComponents/Accounts/AccountFormModal.vue";
 import TransferAccount from "@/components/modalComponents/Accounts/TransferAccount.vue";
+import DeleteModal from "@/components/modalComponents/DeleteModal.vue";
 import FixedButton from "@/components/FixedButton.vue";
 
 const accounts = ref({});
-const type = { 1: "fa-plus" };
-const className = { 1: "btn-primary" };
+const type = ref({ 1: "fa-plus" });
+const className = ref({ 1: "btn-primary" });
+const formID = ref({ 1: "formModal" });
+const accID = ref(null);
 const editMode = ref(false);
-const acc_id = ref(null);
-const currency_arr = ref([]);
 
 const getAccounts = () => {
     axios.get("/api/accounts").then((res) => {
@@ -17,66 +19,27 @@ const getAccounts = () => {
     });
 };
 
+const isClick = ref(false);
+const isDelClick = ref(false);
 const openForm = (id) => {
+    isClick.value = true;
     editMode.value = true;
-    getEditAccounts(id);
+    accID.value = id;
 };
 
-const closeForm = () => {
-    editMode.value = false;
+const openDeleteForm = (id) => {
+    isDelClick.value = true;
+    accID.value = id;
 };
 
-const form = reactive({
-    name: "",
-    currency: "",
-    balance: "",
-    init_amount: "",
-    notes: "",
-});
-
-const getCurrencies = () => {
-    axios.get("/api/accounts/get-currencies").then((res) => {
-        currency_arr.value = res.data;
-    });
-};
-
-const getEditAccounts = (id) => {
-    if (editMode) {
-        axios.get(`/api/accounts/${id}/edit`).then(({ data }) => {
-            form.name = data.name;
-            form.currency = data.currency;
-            form.init_amount = data.init_amount;
-            form.notes = data.notes;
-            console.log(form);
-        });
-    } else {
-        console.log("create mode");
-        form.value = "";
-    }
-};
-
-const createAccount = () => {
-    console.log("create");
-    axios.post("/api/accounts/create", form).then((res) => {});
-};
-
-const editAccount = () => {
-    console.log("edit");
-    axios.get(`/api/accounts/${props.id}/edit`, form).then((res) => {});
-};
-
-const handleSubmit = () => {
-    console.log("submit");
-    if (editMode) {
-        editAccount();
-    } else {
-        createAccount();
-    }
+const handleOpenCreateForm = (mode) => {
+    isClick.value = true;
+    editMode.value = !mode.value;
+    console.log("check", editMode.value);
 };
 
 onMounted(() => {
     getAccounts();
-    getCurrencies();
 });
 </script>
 <template>
@@ -173,15 +136,20 @@ onMounted(() => {
                             >
                                 <button
                                     type="button"
-                                    ref="editBtn"
-                                    class="dropdown-item edit"
+                                    class="dropdown-item"
                                     @click="openForm(acc.id)"
                                     data-toggle="modal"
                                     data-target="#formModal"
                                 >
                                     Edit Account
                                 </button>
-                                <button class="dropdown-item" href="#">
+                                <button
+                                    type="button"
+                                    class="dropdown-item"
+                                    @click="openDeleteForm(acc.id)"
+                                    data-toggle="modal"
+                                    data-target="#deleteModal"
+                                >
                                     Delete Account
                                 </button>
                             </div>
@@ -201,122 +169,20 @@ onMounted(() => {
             </div>
         </div>
     </div>
-    <div class="col-md-10 offset-md-1 col-xl-8 offset-xl-2 my-3">
-        <div
-            class="modal fade"
-            id="formModal"
-            tabindex="-1"
-            aria-labelledby="formModalLabel"
-            data-backdrop="static"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title w-100">
-                            <h3 class="text-center" id=" formModalLabel">
-                                <span v-if="editMode">EDIT ACCOUNT</span>
-                                <span v-else>CREATE NEW ACCOUNT</span>
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="modal-body py-1">
-                        <Form @submit="handleSubmit">
-                            <div class="row">
-                                <div class="col-sm-12 my-1">
-                                    <label for="name">Name</label>
-                                    <div class="input-group">
-                                        <input
-                                            v-model="form.name"
-                                            type="text"
-                                            name="name"
-                                            id="name"
-                                            class="form-control"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 my-1">
-                                    <label for="currency"
-                                        >Account currency</label
-                                    >
-                                    <div class="input-group">
-                                        <select
-                                            v-model="form.currency"
-                                            name="currency"
-                                            id="currency"
-                                            class="form-control"
-                                        >
-                                            <option
-                                                v-for="curr in currency_arr"
-                                                :key="curr.id"
-                                                :value="curr.id"
-                                            >
-                                                {{ curr.type }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 my-1">
-                                    <label for="init_amount">
-                                        Init amount
-                                    </label>
-                                    <div class="input-group">
-                                        <input
-                                            v-model="form.init_amount"
-                                            type="number"
-                                            name="init_amount"
-                                            id="init_amount"
-                                            class="form-control"
-                                        />
-                                        <span class="ml-2 mt-2">$</span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 my-1">
-                                    <label for="note">Notes</label>
-                                    <div class="input-group">
-                                        <textarea
-                                            v-model="form.notes"
-                                            name="note"
-                                            id="note"
-                                            rows="4"
-                                            class="form-control"
-                                            placeholder="Options"
-                                        ></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </Form>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn"
-                            data-dismiss="modal"
-                            @click="closeForm"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-primary px-4"
-                            @click="abc"
-                        >
-                            Save
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <TransferAccount />
-    <!-- <AccountFormModal :id="accountId" :editMode="editMode" /> -->
-    <!-- <AccountFormModal
-        v-if="showModal"
-        :title="modalTitle"
-        :content="modalContent"
-        @close="closeModal"
-    /> -->
-    <FixedButton :quantity="1" :type="type" :btn="className" />
+    <template v-if="isDelClick == true">
+        <DeleteModal :pass_id="accID" />
+    </template>
+    <template v-if="isClick == true">
+        <AccountFormModal :form_id="accID" :editMode="editMode" />
+    </template>
+    <FixedButton
+        :quantity="1"
+        :type="type"
+        :btn="className"
+        :form_id="formID"
+        @open-create-form="handleOpenCreateForm"
+    />
 </template>
 
 <style>

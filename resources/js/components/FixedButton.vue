@@ -1,5 +1,13 @@
 <script setup>
-const props = defineProps(["quantity", "type", "btn"]);
+import { ref } from "vue";
+
+const props = defineProps(["quantity", "type", "btn", "form_id"]);
+const emit = defineEmits(["openCreateForm"]);
+
+const createMode = ref(true);
+const openModal = () => {
+    emit("openCreateForm", createMode);
+};
 const secondBtn = 2;
 </script>
 
@@ -14,10 +22,11 @@ const secondBtn = 2;
         <button
             type="button"
             data-toggle="modal"
-            data-target="#formCreateModal"
+            :data-target="'#' + props.form_id[num]"
             class="btn rounded-circle border"
             :class="props.btn[num]"
             style="z-index: 100; height: 3.5rem; width: 3.5rem"
+            @click="openModal"
         >
             <i class="fas" :class="props.type[num]"></i>
         </button>
