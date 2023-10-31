@@ -1,7 +1,7 @@
 <script setup>
-import { ref, onMounted, onUpdated, reactive } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { useRoute } from "vue-router";
 import { Form } from "vee-validate";
-import AccountFormModal from "../components/modalComponents/Accounts/AccountFormModal.vue";
 import TransferAccount from "@/components/modalComponents/Accounts/TransferAccount.vue";
 import DeleteModal from "@/components/modalComponents/DeleteModal.vue";
 import FixedButton from "@/components/FixedButton.vue";
@@ -9,9 +9,10 @@ import FixedButton from "@/components/FixedButton.vue";
 const accounts = ref({});
 const type = ref({ 1: "fa-plus" });
 const className = ref({ 1: "btn-primary" });
-const formID = ref({ 1: "formModal" });
 const accID = ref(null);
-const editMode = ref(false);
+const accLink = ref("/accounts/create");
+const isDelClick = ref(false);
+const currency_arr = ref([]);
 
 const getAccounts = () => {
     axios.get("/api/accounts").then((res) => {
@@ -19,12 +20,14 @@ const getAccounts = () => {
     });
 };
 
-const isClick = ref(false);
-const isDelClick = ref(false);
+const getCurrencies = () => {
+    axios.get("/api/accounts/get-currencies").then((res) => {
+        currency_arr.value = res.data;
+    });
+};
+
 const openForm = (id) => {
-    isClick.value = true;
-    editMode.value = true;
-    accID.value = id;
+    window.open(`/accounts/update/${id}`, "_self");
 };
 
 const openDeleteForm = (id) => {
@@ -32,14 +35,22 @@ const openDeleteForm = (id) => {
     accID.value = id;
 };
 
-const handleOpenCreateForm = (mode) => {
-    isClick.value = true;
-    editMode.value = !mode.value;
-    console.log("check", editMode.value);
-};
+const getIconByCurrencyId = computed(() => {
+    return function (id) {
+        const object = currency_arr.value.find((obj) => obj.id == id);
+        return object ? object.icon : null;
+    };
+});
+const getTypeByCurrencyId = computed(() => {
+    return function (id) {
+        const object = currency_arr.value.find((obj) => obj.id == id);
+        return object ? object.type : null;
+    };
+});
 
 onMounted(() => {
     getAccounts();
+    getCurrencies();
 });
 </script>
 <template>
@@ -82,9 +93,10 @@ onMounted(() => {
                         <span>{{ acc.name }}</span>
                     </div>
                     <div class="float-right">
-                        <span class="text-success"
-                            >{{ acc.currency }} {{ acc.balance }}</span
-                        >
+                        <span class="text-success">
+                            {{ getIconByCurrencyId(acc.currency) }}
+                            {{ acc.balance }}
+                        </span>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between my-2 mx-4">
@@ -99,8 +111,9 @@ onMounted(() => {
                         <label
                             for="'toggle-visibility-' + index + 1"
                             class="ml-2"
-                            >Normal</label
                         >
+                            Normal
+                        </label>
                     </div>
                     <div class="float-right">
                         <button
@@ -159,9 +172,10 @@ onMounted(() => {
                 <div class="collapse" :id="'collapseAccount' + (index + 1)">
                     <div class="text-center">
                         <p>Creation date: {{ acc.created_at }}</p>
-                        <p>Currency: USD - {{ acc.currency }}</p>
+                        <p>Currency: {{ getTypeByCurrencyId(acc.currency) }}</p>
                         <p>
-                            Initial amount: {{ acc.currency }}
+                            Initial amount:
+                            {{ getIconByCurrencyId(acc.currency) }}
                             {{ acc.init_amount }}
                         </p>
                     </div>
@@ -173,19 +187,23 @@ onMounted(() => {
     <template v-if="isDelClick == true">
         <DeleteModal :pass_id="accID" />
     </template>
-    <template v-if="isClick == true">
-        <AccountFormModal :form_id="accID" :editMode="editMode" />
-    </template>
     <FixedButton
         :quantity="1"
         :type="type"
         :btn="className"
-        :form_id="formID"
-        @open-create-form="handleOpenCreateForm"
+        :form_id="accLink"
     />
 </template>
 
 <style>
+.content {
+    font-size: 1.2em;
+}
+
+label {
+    font-weight: initial !important;
+    font-size: 1em !important;
+}
 .switch {
     position: relative;
     display: inline-block;

@@ -1,14 +1,14 @@
 <script setup>
-import { ref, onMounted, reactive, onUpdated, toRef } from "vue";
+import { ref, onMounted, reactive } from "vue";
+import { useRoute } from "vue-router";
 
-const props = defineProps(["form_id", "editMode"]);
+const route = useRoute();
+const acc_id = ref(route.params.id);
+const editMode = ref(route.params.id ? true : false);
 const currency_arr = ref([]);
-const editMode = ref(props.editMode == true ? true : false);
 
 let form = reactive({
-    name: "",
     currency: "",
-    balance: "",
     init_amount: "",
     notes: "",
 });
@@ -19,38 +19,48 @@ const getCurrencies = () => {
     });
 };
 
-console.log("prop", props.editMode);
-console.log("init", editMode.value);
-const closeForm = () => {
-    editMode.value = !editMode.value;
-    console.log("close", editMode.value);
-};
-
-const getEditAccounts = () => {
-    axios.get(`/api/accounts/${props.form_id}/edit`).then(({ data }) => {
+const getAccounts = () => {
+    axios.get(`/api/accounts/${acc_id.value}/edit`).then(({ data }) => {
         form.name = data.name;
         form.currency = data.currency;
         form.init_amount = data.init_amount;
         form.notes = data.notes;
+        console.log("check", form);
     });
 };
 
 const createAccount = () => {
-    axios.post("/api/accounts/create", form).then((res) => {});
+    axios
+        .post("/api/accounts/create", form)
+        .then((res) => {
+            console.log("create success");
+            // router.push("/accounts");
+        })
+        .catch((e) => {
+            console.log(e);
+        });
 };
 
 const editAccount = () => {
-    axios.get(`/api/accounts/${props.id}/edit`, form).then((res) => {});
+    console.log("check", form);
+    axios
+        .put(`/api/accounts/${acc_id.value}/edit`, form)
+        .then((res) => {
+            console.log("update success");
+        })
+        .catch((e) => {
+            console.log(e);
+        });
 };
 
 const handleSubmit = () => {
-    console.log("click", acc_id);
-    if (props.editMode) {
+    if (editMode.value) {
         editAccount();
     } else {
         createAccount();
     }
 };
+/*
 
 const getExchangeRate = () => {
     /*
@@ -60,7 +70,7 @@ const getExchangeRate = () => {
     & currencies = EUR,GBP,CAD,PLN
     & source = USD
     & format = 1
-    */
+
     // axios
     //     .get("/api/currencyListquotes")
     //     .then((response) => {
@@ -68,41 +78,50 @@ const getExchangeRate = () => {
     //     })
     //     .catch((error) => {});
 };
-
+*/
 onMounted(() => {
     getCurrencies();
-    // getExchangeRate();
-});
-
-onUpdated(() => {
-    console.log("update", editMode.value);
-    if ((editMode.value = true && props.form_id)) {
-        getEditAccounts();
+    if (acc_id.value) {
+        getAccounts();
     }
 });
 </script>
 
 <template>
-    <div
-        class="modal fade"
-        id="formModal"
-        tabindex="-1"
-        aria-labelledby=" formModalLabel"
-        data-backdrop="static"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title w-100">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Account</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item">
+                            <a href="/accounts">Account</a>
+                        </li>
+                        <li class="breadcrumb-item active" v-if="editMode">
+                            Edit Account
+                        </li>
+                        <li class="breadcrumb-item active" v-else>
+                            Create Account
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="col-md-10 offset-md-1 col-xl-8 offset-xl-2">
+            <div class="card">
+                <div class="card-body py-1">
+                    <div class="py-2">
                         <h3 class="text-center" id=" formModalLabel">
                             <span v-if="editMode == true">EDIT ACCOUNT</span>
                             <span v-else>CREATE NEW ACCOUNT</span>
                         </h3>
                     </div>
-                </div>
-                <div class="modal-body py-1">
-                    <form @submit.prevent="handleSubmit">
+                    <form @submit.prevent="handleSubmit" class="pb-3">
                         <div class="row">
                             <div class="col-sm-12 my-1">
                                 <label for="name">Name</label>
@@ -113,6 +132,7 @@ onUpdated(() => {
                                         name="name"
                                         id="name"
                                         class="form-control"
+                                        :readonly="editMode"
                                     />
                                 </div>
                             </div>
@@ -149,12 +169,12 @@ onUpdated(() => {
                                 </div>
                             </div>
                             <div class="col-sm-12 my-1">
-                                <label for="note">Notes</label>
+                                <label for="notes">Notes</label>
                                 <div class="input-group">
                                     <textarea
                                         v-model="form.notes"
-                                        name="note"
-                                        id="note"
+                                        name="notes"
+                                        id="notes"
                                         rows="4"
                                         class="form-control"
                                         placeholder="Options"
@@ -162,24 +182,16 @@ onUpdated(() => {
                                 </div>
                             </div>
                         </div>
+                        <div class="py-2 text-right">
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                                @click="abc"
+                            >
+                                Save
+                            </button>
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn"
-                        data-dismiss="modal"
-                        @click="closeForm"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="button"
-                        class="btn btn-primary px-4"
-                        @click="abc"
-                    >
-                        Save
-                    </button>
                 </div>
             </div>
         </div>

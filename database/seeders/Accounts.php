@@ -19,7 +19,6 @@ class Accounts extends Seeder
         DB::table('accounts')->insert([
             'id' => 1,
             'name' => 'Wallet',
-            'type' => 1,
             'currency' => '$',
             'balance' => 100.00,
             'init_amount' => 100.00,

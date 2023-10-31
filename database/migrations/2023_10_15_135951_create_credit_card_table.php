@@ -21,9 +21,8 @@ return new class extends Migration
             $table->decimal('limit', 10, 2);
             $table->date('due_date');
             $table->decimal('interest_rate', 10, 2);
+            $table->string('notes', 255)->nullable();
             $table->timestamps();
-
-            $table->foreign('account_id')->references('id')->on('accounts');
         });
     }
 

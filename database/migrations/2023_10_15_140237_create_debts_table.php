@@ -21,10 +21,8 @@ return new class extends Migration
             $table->date('due_date');
             $table->unsignedInteger('primary_account_id');
             $table->unsignedInteger('secondary_account_id');
+            $table->string('notes', 255)->nullable();
             $table->timestamps();
-
-            $table->foreign('primary_account_id')->references('id')->on('accounts');
-            $table->foreign('secondary_account_id')->references('id')->on('accounts');
         });
     }
 

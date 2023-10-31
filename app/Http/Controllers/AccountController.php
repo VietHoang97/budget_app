@@ -18,7 +18,6 @@ class AccountController extends Controller
         $data = Account::select([
             "{$accounts}.id",
             "{$accounts}.name",
-            "{$accounts}.type",
             "{$accounts}.currency",
             "{$accounts}.balance",
             "{$accounts}.init_amount",
@@ -34,24 +33,25 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        $balance = $request('init_amount');
-        dd($balance);
+        $balance = $request->init_amount;
         $validated = request()->validate([
             'name' => 'required',
-            'type' => 'required',
             'currency' => 'required',
             'init_amount' => 'required',
         ]);
 
-        Account::create([
+        $result = Account::create([
             'name' => $validated['name'],
-            'type' => $validated['type'],
             'currency' => $validated['currency'],
-            'balance' => $validated['balance'],
+            'balance' => $balance,
             'init_amount' => $validated['init_amount'],
         ]);
+        if($result) {
+            return response()->json(['message' => 'Create account successfully']);
+        } else {
+            return response()->json(['error' => 'Create failed! Please try again later.'], 401);
+        }
 
-        return response()->json(['message' => 'Create account successfully']);
     }
 
     /**
@@ -63,7 +63,6 @@ class AccountController extends Controller
     public function edit($id)
     {
         $accounts =  Account::find($id);
-        // dd($accounts, $id);
         return $accounts;
     }
 
@@ -74,21 +73,24 @@ class AccountController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $accounts)
+    public function update(Request $request, $id)
     {
         $validated = request()->validate([
-            'name' => 'required',
-            'type' => 'required',
             'currency' => 'required',
-            'balance' => 'required',
-            'init_amount' => 'required',
+            'init_amount' => 'required|numeric',
         ]);
 
-        $accounts->update([
-            $validated
+        $result = Account::where('id',$id)->update([
+            'currency' => $validated['currency'],
+            'init_amount' => $validated['init_amount'],
+            'notes' => $request->notes ? $request->notes : ''
         ]);
+        if($result) {
+            return response()->json(['message' => 'Update account successfully']);
+        }else {
+            return response()->json(['error' => 'Update failed! Please try again later.'], 401);
+        }
 
-        return response()->json(['message' => 'Create account successfully']);
     }
 
     /**
@@ -97,8 +99,9 @@ class AccountController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($accounts)
+    public function destroy($id)
     {
+        $accounts = Account::find($id);
         $accounts->delete();
         return response()->json(['success', true], 200);
     }

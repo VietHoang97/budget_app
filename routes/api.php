@@ -23,8 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('/accounts')->group(function () {
     Route::get('/', [AccountController::class, 'index']);
     Route::post('/create', [AccountController::class, 'store']);
-    Route::get('/{id}/edit/', [AccountController::class, 'edit']);
+    Route::get('/{id}/edit', [AccountController::class, 'edit']);
     Route::put('/{id}/edit/', [AccountController::class, 'update']);
-    Route::delete('/{id}', [AccountController::class], 'destroy');
+    Route::delete('/{id}', [AccountController::class, 'destroy']);
     Route::get('/get-currencies', [AccountController::class, 'getCurrency']);
 });

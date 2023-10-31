@@ -1,14 +1,21 @@
 <script setup>
 import $ from "jquery";
-const toggleCircle = function (e) {
-    if ($(e.children).attr("class").includes("on")) {
-        $(e.children).removeClass("fa-toggle-on");
-        $(e.children).addClass("fa-toggle-off");
-    } else {
-        $(e.children).removeClass("fa-toggle-off");
-        $(e.children).addClass("fa-toggle-on");
-    }
-};
+// const toggleCircle = function (e) {
+//     if ($(e.children).attr("class").includes("on")) {
+//         $(e.children).removeClass("fa-toggle-on");
+//         $(e.children).addClass("fa-toggle-off");
+//     } else {
+//         $(e.children).removeClass("fa-toggle-off");
+//         $(e.children).addClass("fa-toggle-on");
+//     }
+// };
+const now = new Date();
+const hours = now.getHours();
+const minutes = now.getMinutes();
+
+const formattedHours = hours < 10 ? `0${hours}` : hours;
+const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+const currentTime = `${formattedHours}:${formattedMinutes}`;
 </script>
 
 <template>
@@ -56,7 +63,6 @@ const toggleCircle = function (e) {
                                     </label>
                                     <div class="input-group">
                                         <select
-                                            type="text"
                                             name="transfer"
                                             id="transfer_account"
                                             class="form-control"
@@ -108,10 +114,8 @@ const toggleCircle = function (e) {
                             </div>
                             <div class="row my-3">
                                 <div class="col-sm-12">
-                                    <span
-                                        class="btn text-primary"
-                                        @click="toggleCircle($event)"
-                                    >
+                                    <span class="btn text-primary">
+                                        <!-- @click="toggleCircle($event)" -->
                                         <i class="fas fa-toggle-on"></i>
                                     </span>
                                     <span>Checked</span>
@@ -119,10 +123,8 @@ const toggleCircle = function (e) {
                             </div>
                             <div class="row my-3">
                                 <div class="col-sm-12">
-                                    <span
-                                        class="btn text-primary"
-                                        @click="toggleCircle($event)"
-                                    >
+                                    <span class="btn text-primary">
+                                        <!-- @click="toggleCircle($event)" -->
                                         <i class="fas fa-toggle-on"></i>
                                     </span>
                                     <span>Scheduled transfer</span>

@@ -18,9 +18,8 @@ return new class extends Migration
             $table->unsignedInteger('transaction_id');
             $table->string('frequency');
             $table->dateTime('next_occurrence');
+            $table->string('notes', 255)->nullable();
             $table->timestamps();
-
-            $table->foreign('transaction_id')->references('id')->on('transactions');
         });
     }
 

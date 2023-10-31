@@ -19,10 +19,8 @@ return new class extends Migration
             $table->dateTime('date');
             $table->decimal('amount', 10, 2);
             $table->string('description', 255);
+            $table->string('notes', 255)->nullable();
             $table->timestamps();
-
-            $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

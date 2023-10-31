@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->unique();
-            $table->tinyInteger('type');
             $table->string('currency', 20);
             $table->decimal('balance', 10, 2);
             $table->decimal('init_amount', 10, 2);
+            $table->string('notes', 255)->nullable();
             $table->timestamps();
         });
     }

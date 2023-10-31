@@ -1,7 +1,12 @@
 import Dashboard from "./components/Dashboard.vue";
-import Account from "./pages/Account.vue";
+import Account from "./pages/Accounts/account.vue";
+import AccountIndex from "./pages/Accounts/accountIndex.vue";
+import accountForm from "./pages/Accounts/accountForm.vue";
 import Calendar from "./pages/Calendar.vue";
-import Budget from "./pages/Budget.vue";
+import budgetIndex from "./pages/Budgets/budgetIndex.vue";
+import Budget from "./pages/Budgets/budget.vue";
+import createBudget from "./pages/Budgets/create.vue";
+import editBudget from "./pages/Budgets/edit.vue";
 import CategoryChart from "./pages/Charts/CategoryChart.vue";
 import ForecastChart from "./pages/Charts/ForecastChart.vue";
 import FutureTimeChart from "./pages/Charts/FutureTimeChart.vue";
@@ -19,7 +24,7 @@ import Transactions from "./pages/Transactions.vue";
 
 export default [
     {
-        path: "/dashboard",
+        path: "/",
         name: "admin.dashboard",
         component: Dashboard,
     },
@@ -31,12 +36,51 @@ export default [
     {
         path: "/accounts",
         name: "admin.account",
-        component: Account,
+        component: AccountIndex,
+        children: [
+            {
+                path: "",
+                name: "account.index",
+                component: Account,
+            },
+            {
+                path: "create",
+                name: "account.create",
+                component: accountForm,
+            },
+            {
+                path: "update/:id",
+                name: "account.update",
+                component: accountForm,
+            },
+            // {
+            //     path: "/transfer/:id",
+            //     name: "account.transfer",
+            //     // component: TransferAccount,
+            // },
+        ],
     },
     {
         path: "/budgets",
         name: "admin.budget",
-        component: Budget,
+        component: budgetIndex,
+        children: [
+            {
+                path: "",
+                name: "budget.index",
+                component: Budget,
+            },
+            {
+                path: "create",
+                name: "budget.create",
+                component: createBudget,
+            },
+            {
+                path: "update/:id",
+                name: "budget.update",
+                component: editBudget,
+            },
+        ],
     },
     {
         path: "/calendar",
