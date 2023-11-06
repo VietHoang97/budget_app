@@ -15,7 +15,7 @@ const secondBtn = 2;
         :key="num"
         class="position-fixed"
         style="right: 0; margin-inline-end: 20px"
-        :style="num == secondBtn ? 'bottom: 160px' : 'bottom: 90px;'"
+        :style="num == secondBtn ? 'bottom: 140px' : 'bottom: 70px;'"
     >
         <button
             type="button"

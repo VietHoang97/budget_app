@@ -1,14 +1,15 @@
 <script setup>
 import { ref, onMounted, reactive } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 const acc_id = ref(route.params.id);
 const editMode = ref(route.params.id ? true : false);
 const currency_arr = ref([]);
 
 let form = reactive({
-    currency: "",
+    currency: 1,
     init_amount: "",
     notes: "",
 });
@@ -59,6 +60,10 @@ const handleSubmit = () => {
     } else {
         createAccount();
     }
+};
+
+const goBack = () => {
+    router.push("/accounts");
 };
 /*
 
@@ -184,8 +189,15 @@ onMounted(() => {
                         </div>
                         <div class="py-2 text-right">
                             <button
+                                type="button"
+                                class="btn btn-light text-primary mr-3 text-uppercase"
+                                @click="goBack"
+                            >
+                                Cancel
+                            </button>
+                            <button
                                 type="submit"
-                                class="btn btn-primary"
+                                class="btn btn-primary text-uppercase"
                                 @click="abc"
                             >
                                 Save

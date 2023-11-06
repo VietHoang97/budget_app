@@ -1,3 +1,25 @@
+<script setup>
+import { ref } from "vue";
+import FixedButton from "@/components/FixedButton.vue";
+import DeleteModal from "@/components/modalComponents/DeleteModal.vue";
+
+const type = ref({ 1: "fa-plus" });
+const className = ref({ 1: "btn-primary" });
+const budgetLink = ref("/budgets/create");
+const isDelClick = ref(false);
+const slug = ref("budgets");
+const budgetID = ref(null);
+
+const openUpdate = () => {
+    let id = 1;
+    window.open(`/budgets/update/${id}`, "_self");
+};
+const openDelete = (id) => {
+    isDelClick.value = true;
+    budgetID.value = id;
+};
+</script>
+
 <template>
     <div class="content-header">
         <div class="container-fluid">
@@ -7,7 +29,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
                         <li class="breadcrumb-item active">Budgets</li>
                     </ol>
                 </div>
@@ -67,14 +89,19 @@
                             </div>
                         </div>
                         <div class="float-right">
-                            <button class="btn">
+                            <button class="btn" @click="openUpdate()">
                                 <i class="fas fa-pen"></i>
                             </button>
-                            <button class="btn">
+                            <button
+                                class="btn"
+                                @click="openDelete()"
+                                data-toggle="modal"
+                                data-target="#deleteModal"
+                            >
                                 <i class="fas fa-trash"></i>
                             </button>
                             <div class="text-right mt-2">
-                                <span>$8.00 / #30.00</span>
+                                <span>$8.00 / $30.00</span>
                             </div>
                         </div>
                     </div>
@@ -130,14 +157,19 @@
                             </div>
                         </div>
                         <div class="float-right">
-                            <button class="btn">
+                            <button class="btn" @click="openUpdate()">
                                 <i class="fas fa-pen"></i>
                             </button>
-                            <button class="btn">
+                            <button
+                                class="btn"
+                                @click="openDelete()"
+                                data-toggle="modal"
+                                data-target="#deleteModal"
+                            >
                                 <i class="fas fa-trash"></i>
                             </button>
                             <div class="text-right mt-2">
-                                <span>$8.00 / #30.00</span>
+                                <span>$8.00 / $30.00</span>
                             </div>
                         </div>
                     </div>
@@ -193,14 +225,19 @@
                             </div>
                         </div>
                         <div class="float-right">
-                            <button class="btn">
+                            <button class="btn" @click="openUpdate()">
                                 <i class="fas fa-pen"></i>
                             </button>
                             <button class="btn">
-                                <i class="fas fa-trash"></i>
+                                <i
+                                    class="fas fa-trash"
+                                    @click="openDelete()"
+                                    data-toggle="modal"
+                                    data-target="#deleteModal"
+                                ></i>
                             </button>
                             <div class="text-right mt-2">
-                                <span>$8.00 / #30.00</span>
+                                <span>$8.00 / $30.00</span>
                             </div>
                         </div>
                     </div>
@@ -208,4 +245,13 @@
             </div>
         </div>
     </div>
+    <template v-if="isDelClick == true">
+        <DeleteModal :pass_id="budgetID" :type="slug" />
+    </template>
+    <FixedButton
+        :quantity="1"
+        :type="type"
+        :btn="className"
+        :form_id="budgetLink"
+    />
 </template>

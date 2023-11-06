@@ -5,6 +5,7 @@ import { Form } from "vee-validate";
 import TransferAccount from "@/components/modalComponents/Accounts/TransferAccount.vue";
 import DeleteModal from "@/components/modalComponents/DeleteModal.vue";
 import FixedButton from "@/components/FixedButton.vue";
+// import chart from "../../components/modalComponents/Accounts/chart.vue";
 
 const accounts = ref({});
 const type = ref({ 1: "fa-plus" });
@@ -13,6 +14,7 @@ const accID = ref(null);
 const accLink = ref("/accounts/create");
 const isDelClick = ref(false);
 const currency_arr = ref([]);
+const slug = ref("accounts");
 
 const getAccounts = () => {
     axios.get("/api/accounts").then((res) => {
@@ -26,7 +28,7 @@ const getCurrencies = () => {
     });
 };
 
-const openForm = (id) => {
+const openUpdate = (id) => {
     window.open(`/accounts/update/${id}`, "_self");
 };
 
@@ -73,7 +75,14 @@ onMounted(() => {
     <div class="content">
         <div class="col-md-10 offset-md-1 col-xl-8 offset-xl-2">
             <div class="card my-3">
-                <div class="d-flex justify-content-between my-2 mx-4">
+                <div
+                    class="d-flex justify-content-between my-2 mx-4"
+                    data-toggle="collapse"
+                    href="#collapseExample"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="collapseExample"
+                >
                     <div class="float-left button">
                         <i class="fas fa-caret-down"></i>
                     </div>
@@ -81,6 +90,9 @@ onMounted(() => {
                         <span>Total:</span>
                         <span class="text-success">$13,344.34</span>
                     </div>
+                </div>
+                <div class="collapse" id="collapseExample">
+                    <!-- <chart /> -->
                 </div>
             </div>
             <div
@@ -150,9 +162,7 @@ onMounted(() => {
                                 <button
                                     type="button"
                                     class="dropdown-item"
-                                    @click="openForm(acc.id)"
-                                    data-toggle="modal"
-                                    data-target="#formModal"
+                                    @click="openUpdate(acc.id)"
                                 >
                                     Edit Account
                                 </button>
@@ -185,7 +195,7 @@ onMounted(() => {
     </div>
     <TransferAccount />
     <template v-if="isDelClick == true">
-        <DeleteModal :pass_id="accID" />
+        <DeleteModal :pass_id="accID" :type="slug" />
     </template>
     <FixedButton
         :quantity="1"

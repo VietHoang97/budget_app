@@ -7,6 +7,11 @@ import FixedButton from "@/components/FixedButton.vue";
 const type = { 1: "fa-plus" };
 const className = { 1: "btn-primary" };
 const accLink = ref("/credit/create");
+
+const openUpdate = () => {
+    let id = 1;
+    window.open(`credit/update/${id}`, "_self");
+};
 </script>
 <template>
     <div class="content-header">
@@ -110,15 +115,13 @@ const accLink = ref("/credit/create");
                             >
                                 <button
                                     type="button"
-                                    ref="editBtn"
                                     class="dropdown-item"
-                                    data-toggle="modal"
-                                    data-target="#formModal"
+                                    @click="openUpdate()"
                                 >
-                                    Edit Account
+                                    Edit Credit Card
                                 </button>
                                 <button class="dropdown-item" href="#">
-                                    Delete Account
+                                    Delete Credit Card
                                 </button>
                             </div>
                         </div>

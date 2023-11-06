@@ -1,10 +1,10 @@
 <script setup>
 import { ref, onMounted } from "vue";
-const props = defineProps(["pass_id"]);
+const props = defineProps(["pass_id", "type"]);
 const name = ref("");
 
 const getAccounts = () => {
-    axios.get(`/api/accounts/${props.pass_id}/edit`).then(({ data }) => {
+    axios.get(`/api/${props.type}/${props.pass_id}/edit`).then(({ data }) => {
         name.value = data.name;
     });
 };

@@ -12,7 +12,10 @@ import { Form } from "vee-validate";
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Budgets</li>
+                        <li class="breadcrumb-item">
+                            <a href="/budgets">Budgets</a>
+                        </li>
+                        <li class="breadcrumb-item active">Edit Budgets</li>
                     </ol>
                 </div>
             </div>
@@ -36,57 +39,62 @@ import { Form } from "vee-validate";
                         >
                             <li class="nav-item col p-0">
                                 <a
-                                    class="nav-link active"
-                                    id="income-tab"
+                                    class="nav-link active text-dark"
+                                    id="single-tab"
                                     data-toggle="tab"
-                                    href="#nav-income"
+                                    href="#nav-single"
                                 >
                                     Single Category
                                 </a>
                             </li>
                             <li class="nav-item col p-0">
                                 <a
-                                    class="nav-link"
-                                    id="expense-tab"
+                                    class="nav-link text-dark"
+                                    id="multi-tab"
                                     data-toggle="tab"
-                                    href="#nav-expense"
+                                    href="#nav-multi"
                                 >
                                     Multi Category
                                 </a>
                             </li>
                             <li class="nav-item col p-0">
                                 <a
-                                    class="nav-link"
-                                    id="nav-contact-tab"
+                                    class="nav-link text-dark"
+                                    id="nav-all-tab"
                                     data-toggle="tab"
-                                    href="#nav-contact"
+                                    href="#nav-all"
                                 >
                                     All Category
                                 </a>
                             </li>
                         </ul>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body px-1">
                         <div class="tab-content">
                             <div
                                 class="tab-pane fade show active"
-                                id="nav-income"
+                                id="nav-single"
                                 role="tabpanel"
-                                aria-labelledby="income-tab"
+                                aria-labelledby="single-tab"
                             >
-                                <div class="item_selector_light">
-                                    <div
-                                        class="d-flex justify-content-between py-1"
-                                        href="#st1"
-                                        data-toggle="collapse"
-                                        aria-expanded="false"
-                                        aria-controls="st1"
-                                    >
-                                        <div class="row">
-                                            <div class="col-sm-6 mr-2 my-2">
-                                                <label for="amount"
-                                                    >Budget amount</label
-                                                >
+                                <div
+                                    class="py-1"
+                                    data-toggle="collapse"
+                                    aria-expanded="false"
+                                >
+                                    <div class="row">
+                                        <div class="d-flex col-sm-6 my-2">
+                                            <div
+                                                class="col-1 d-flex align-items-center"
+                                            >
+                                                <i
+                                                    class="fas fa-piggy-bank"
+                                                ></i>
+                                            </div>
+                                            <div class="col-11">
+                                                <label for="amount">
+                                                    Budget amount
+                                                </label>
                                                 <div class="input-group">
                                                     <input
                                                         type="text"
@@ -96,15 +104,26 @@ import { Form } from "vee-validate";
                                                     />
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div
+                                            class="d-flex mt-4 align-items-center"
+                                        >
+                                            <span class="">$</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="d-flex col-sm-6 mr-2 my-2">
                                             <div
-                                                class="d-flex mt-4 align-items-center"
+                                                class="col-1 d-flex align-items-center"
                                             >
-                                                <span class="">$</span>
+                                                <i
+                                                    class="fas fa-project-diagram"
+                                                ></i>
                                             </div>
-                                            <div class="col-sm-6 mr-2 my-2">
-                                                <label for="category"
-                                                    >Category</label
-                                                >
+                                            <div class="col-11">
+                                                <label for="category">
+                                                    Category
+                                                </label>
                                                 <div class="input-group">
                                                     <input
                                                         type="text"
@@ -114,7 +133,20 @@ import { Form } from "vee-validate";
                                                     />
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6 my-2">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div
+                                            class="d-flex align-items-center col-sm-6 my-2"
+                                        >
+                                            <div
+                                                class="col-sm-1 d-flex align-items-cente"
+                                            >
+                                                <i
+                                                    class="fas fa-university"
+                                                ></i>
+                                            </div>
+                                            <div class="col-sm-11">
                                                 <label for="acount">
                                                     Account</label
                                                 >
@@ -139,10 +171,21 @@ import { Form } from "vee-validate";
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6 my-2">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div
+                                            class="d-flex align-items-center col-sm-6 my-2"
+                                        >
+                                            <div
+                                                class="col-sm-1 d-flex align-items-cente"
+                                            >
+                                                <i class="fas fa-stopwatch"></i>
+                                            </div>
+                                            <div class="col-sm-11">
                                                 <label for="duration">
-                                                    Duration</label
-                                                >
+                                                    Duration
+                                                </label>
                                                 <div class="input-group">
                                                     <select
                                                         name="duration"
@@ -163,226 +206,323 @@ import { Form } from "vee-validate";
                                             </div>
                                         </div>
                                     </div>
-                                    <div
-                                        class="template_tr_scheduled_details text-center collapse multi-collapse"
-                                        id="st1"
-                                    >
-                                        <p class="m-0">
-                                            Repeats every:
-                                            <span> 1 </span> Month
-                                        </p>
-                                        <p>
-                                            Repetition remaining:
-                                            <span> 12 </span>
-                                        </p>
-                                    </div>
                                 </div>
                             </div>
 
                             <div
                                 class="tab-pane fade show"
-                                id="nav-expense"
+                                id="nav-multi"
                                 role="tabpanel"
-                                aria-labelledby="expense-tab"
+                                aria-labelledby="multi-tab"
                             >
-                                <a
-                                    class="d-flex justify-content-between py-1 item_selector_light"
-                                    href="#st2"
+                                <div
+                                    class="py-1"
                                     data-toggle="collapse"
                                     aria-expanded="false"
-                                    aria-controls="st2"
                                 >
-                                    <div
-                                        class="d-flex justify-content-center align-items-center"
-                                    >
-                                        <img
-                                            src="https://webapp.fastbudget.app/static/icons/ic_party_hat.svg"
-                                            alt="entertainment"
-                                            width="48"
-                                            height="48"
-                                        />
-                                    </div>
-                                    <div class="d-block w-100">
-                                        <div class="row mx-2">
-                                            <div class="col text-left p-0">
-                                                Other (Expenses)
+                                    <div class="row">
+                                        <div class="d-flex col-sm-6 my-2">
+                                            <div
+                                                class="col-1 d-flex align-items-center"
+                                            >
+                                                <i class="fas fa-tag"></i>
                                             </div>
-                                            <div class="col text-right p-0">
-                                                -$30.00
-                                            </div>
-                                        </div>
-                                        <div class="row mx-2">
-                                            <div class="col text-left p-0">
-                                                Wallet
-                                            </div>
-                                            <div class="col text-right p-0">
-                                                12/10/2023
+                                            <div class="col-11">
+                                                <label for="amount">
+                                                    Name
+                                                </label>
+                                                <div class="input-group">
+                                                    <input
+                                                        type="text"
+                                                        name="amount"
+                                                        id="amount"
+                                                        class="form-control"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="btn-group">
-                                            <button
-                                                class="btn"
-                                                data-toggle="dropdown"
-                                                data-display="static"
-                                                aria-expanded="false"
+                                    <div class="row">
+                                        <div class="d-flex col-sm-6 my-2">
+                                            <div
+                                                class="col-1 d-flex align-items-center"
                                             >
                                                 <i
-                                                    class="fas fa-ellipsis-v"
+                                                    class="fas fa-piggy-bank"
                                                 ></i>
-                                            </button>
-                                            <div
-                                                class="dropdown-menu dropdown-menu-sm-right dropdown-menu-right"
-                                            >
-                                                <button
-                                                    class="btn dropdown-item"
-                                                >
-                                                    Repeat now
-                                                </button>
-                                                <button
-                                                    class="btn dropdown-item"
-                                                >
-                                                    Skip repetition
-                                                </button>
-                                                <button
-                                                    class="btn dropdown-item"
-                                                >
-                                                    Duplicate transaction
-                                                </button>
-                                                <button
-                                                    class="btn dropdown-item"
-                                                >
-                                                    Edit transaction
-                                                </button>
-                                                <button
-                                                    class="btn dropdown-item"
-                                                >
-                                                    Delete transaction
-                                                </button>
+                                            </div>
+                                            <div class="col-11">
+                                                <label for="amount">
+                                                    Budget amount
+                                                </label>
+                                                <div class="input-group">
+                                                    <input
+                                                        type="text"
+                                                        name="amount"
+                                                        id="amount"
+                                                        class="form-control"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                         <div
-                                            class="template_tr_color ml-2"
-                                        ></div>
+                                            class="d-flex mt-4 align-items-center"
+                                        >
+                                            <span class="">$</span>
+                                        </div>
                                     </div>
-                                </a>
-                                <div
-                                    class="template_tr_scheduled_details text-center collapse multi-collapse"
-                                    id="st2"
-                                >
-                                    <p class="m-0">
-                                        Repeats every:
-                                        <span> 1 </span> Month
-                                    </p>
-                                    <p>
-                                        Repetition remaining:
-                                        <span> 12 </span>
-                                    </p>
+                                    <div class="row">
+                                        <div
+                                            class="d-flex align-items-center col-sm-6 mr-2 my-2"
+                                        >
+                                            <div class="col-1">
+                                                <i class="far fa-circle"></i>
+                                            </div>
+                                            <label for="category">
+                                                Picture
+                                            </label>
+                                            <div class="input-group ml-4">
+                                                <img
+                                                    src="https://webapp.fastbudget.app/static/icons/ic_blank_grey.svg"
+                                                    alt=""
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="d-flex col-sm-6 mr-2 my-2">
+                                            <div
+                                                class="col-1 d-flex align-items-center"
+                                            >
+                                                <i
+                                                    class="fas fa-project-diagram"
+                                                ></i>
+                                            </div>
+                                            <div class="col-11">
+                                                <label for="category">
+                                                    Category
+                                                </label>
+                                                <div class="input-group">
+                                                    <input
+                                                        type="text"
+                                                        name="category"
+                                                        id="category"
+                                                        class="form-control"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div
+                                            class="d-flex align-items-center col-sm-6 my-2"
+                                        >
+                                            <div
+                                                class="col-sm-1 d-flex align-items-cente"
+                                            >
+                                                <i
+                                                    class="fas fa-university"
+                                                ></i>
+                                            </div>
+                                            <div class="col-sm-11">
+                                                <label for="acount">
+                                                    Account</label
+                                                >
+                                                <div class="input-group">
+                                                    <select
+                                                        name="acount"
+                                                        id="acount"
+                                                        class="form-control"
+                                                    >
+                                                        <option value="">
+                                                            All Accounts
+                                                        </option>
+                                                        <option value="1">
+                                                            Credit Card
+                                                        </option>
+                                                        <option value="2">
+                                                            Wallets
+                                                        </option>
+                                                        <option value="3">
+                                                            Bank Account
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div
+                                            class="d-flex align-items-center col-sm-6 my-2"
+                                        >
+                                            <div
+                                                class="col-sm-1 d-flex align-items-cente"
+                                            >
+                                                <i class="fas fa-stopwatch"></i>
+                                            </div>
+                                            <div class="col-sm-11">
+                                                <label for="duration">
+                                                    Duration
+                                                </label>
+                                                <div class="input-group">
+                                                    <select
+                                                        name="duration"
+                                                        id="duration"
+                                                        class="form-control"
+                                                    >
+                                                        <option value="1">
+                                                            1 Week
+                                                        </option>
+                                                        <option value="2">
+                                                            1 Month
+                                                        </option>
+                                                        <option value="3">
+                                                            Other
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div
                                 class="tab-pane fade show"
-                                id="nav-contact"
+                                id="nav-all"
                                 role="tabpanel"
-                                aria-labelledby="nav-contact-tab"
+                                aria-labelledby="nav-all-tab"
                             >
-                                <div>
-                                    <a
-                                        class="d-flex justify-content-between py-1 item_selector_light"
-                                        href="#st3"
-                                        data-toggle="collapse"
-                                        aria-expanded="false"
-                                        aria-controls="st3"
-                                    >
-                                        <div
-                                            class="d-flex justify-content-center align-items-center"
-                                        >
-                                            <img
-                                                src="https://webapp.fastbudget.app/static/icons/ic_party_hat.svg"
-                                                alt="entertainment"
-                                                width="48"
-                                                height="48"
-                                            />
-                                        </div>
-                                        <div class="d-block w-100">
-                                            <div class="row mx-2">
-                                                <div class="col text-left p-0">
-                                                    Energy bill
-                                                </div>
-                                                <div class="col text-right p-0">
-                                                    -$30.00
-                                                </div>
-                                            </div>
-                                            <div class="row mx-2">
-                                                <div class="col text-left p-0">
-                                                    Wallet
-                                                </div>
-                                                <div class="col text-right p-0">
-                                                    12/10/2023
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <div class="btn-group">
-                                                <button
-                                                    class="btn"
-                                                    data-toggle="dropdown"
-                                                    data-display="static"
-                                                    aria-expanded="false"
-                                                >
-                                                    <i
-                                                        class="fas fa-ellipsis-v"
-                                                    ></i>
-                                                </button>
-                                                <div
-                                                    class="dropdown-menu dropdown-menu-sm-right dropdown-menu-right"
-                                                >
-                                                    <button
-                                                        class="btn dropdown-item"
-                                                    >
-                                                        Repeat now
-                                                    </button>
-                                                    <button
-                                                        class="btn dropdown-item"
-                                                    >
-                                                        Skip repetition
-                                                    </button>
-                                                    <button
-                                                        class="btn dropdown-item"
-                                                    >
-                                                        Duplicate transaction
-                                                    </button>
-                                                    <button
-                                                        class="btn dropdown-item"
-                                                    >
-                                                        Edit transaction
-                                                    </button>
-                                                    <button
-                                                        class="btn dropdown-item"
-                                                    >
-                                                        Delete transaction
-                                                    </button>
-                                                </div>
-                                            </div>
+                                <div
+                                    class="py-1"
+                                    data-toggle="collapse"
+                                    aria-expanded="false"
+                                >
+                                    <div class="row">
+                                        <div class="d-flex col-sm-6 my-2">
                                             <div
-                                                class="template_tr_color ml-2"
-                                            ></div>
+                                                class="col-1 d-flex align-items-center"
+                                            >
+                                                <i
+                                                    class="fas fa-piggy-bank"
+                                                ></i>
+                                            </div>
+                                            <div class="col-11">
+                                                <label for="amount">
+                                                    Budget amount
+                                                </label>
+                                                <div class="input-group">
+                                                    <input
+                                                        type="text"
+                                                        name="amount"
+                                                        id="amount"
+                                                        class="form-control"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
-                                    </a>
-                                    <div
-                                        class="template_tr_scheduled_details text-center collapse multi-collapse"
-                                        id="st3"
-                                    >
-                                        <p class="m-0">
-                                            Repeats every:
-                                            <span> 1 </span> Month
-                                        </p>
-                                        <p>
-                                            Repetition remaining:
-                                            <span> 12 </span>
-                                        </p>
+                                        <div
+                                            class="d-flex mt-4 align-items-center"
+                                        >
+                                            <span class="">$</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="d-flex col-sm-6 mr-2 my-2">
+                                            <div
+                                                class="col-1 d-flex align-items-center"
+                                            >
+                                                <i
+                                                    class="fas fa-project-diagram"
+                                                ></i>
+                                            </div>
+                                            <div class="col-11">
+                                                <label for="category">
+                                                    Category
+                                                </label>
+                                                <div class="input-group">
+                                                    <input
+                                                        type="text"
+                                                        name="category"
+                                                        id="category"
+                                                        class="form-control"
+                                                        value="All category"
+                                                        readonly
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div
+                                            class="d-flex align-items-center col-sm-6 my-2"
+                                        >
+                                            <div
+                                                class="col-sm-1 d-flex align-items-cente"
+                                            >
+                                                <i
+                                                    class="fas fa-university"
+                                                ></i>
+                                            </div>
+                                            <div class="col-sm-11">
+                                                <label for="acount">
+                                                    Account</label
+                                                >
+                                                <div class="input-group">
+                                                    <select
+                                                        name="acount"
+                                                        id="acount"
+                                                        class="form-control"
+                                                    >
+                                                        <option value="">
+                                                            All Accounts
+                                                        </option>
+                                                        <option value="1">
+                                                            Credit Card
+                                                        </option>
+                                                        <option value="2">
+                                                            Wallets
+                                                        </option>
+                                                        <option value="3">
+                                                            Bank Account
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div
+                                            class="d-flex align-items-center col-sm-6 my-2"
+                                        >
+                                            <div
+                                                class="col-sm-1 d-flex align-items-cente"
+                                            >
+                                                <i class="fas fa-stopwatch"></i>
+                                            </div>
+                                            <div class="col-sm-11">
+                                                <label for="duration">
+                                                    Duration
+                                                </label>
+                                                <div class="input-group">
+                                                    <select
+                                                        name="duration"
+                                                        id="duration"
+                                                        class="form-control"
+                                                    >
+                                                        <option value="1">
+                                                            1 Week
+                                                        </option>
+                                                        <option value="2">
+                                                            1 Month
+                                                        </option>
+                                                        <option value="3">
+                                                            Other
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -713,30 +853,6 @@ import { Form } from "vee-validate";
     </div>
 </template>
 <style>
-.nav-option .nav-link {
-    color: rgba(0, 0, 0, 0.5);
-}
-
-.item_selector_light {
-    cursor: pointer;
-    color: #000;
-}
-.item_selector_light:hover {
-    background-color: #f9f9f9;
-    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.08);
-    color: #000;
-    text-decoration: none;
-}
-.dropdown-toggle::after {
-    border: none !important;
-    margin-left: none !important;
-}
-.template_tr_color {
-    width: 5px;
-    height: 45px;
-    background-color: rgb(239, 154, 154);
-}
-
 @media screen and (max-width: 540px) {
     .container-fluid {
         padding: 0;
