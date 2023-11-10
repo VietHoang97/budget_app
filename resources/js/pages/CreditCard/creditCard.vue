@@ -8,10 +8,22 @@ const type = { 1: "fa-plus" };
 const className = { 1: "btn-primary" };
 const accLink = ref("/credit/create");
 
+const credit = ref({});
+
 const openUpdate = () => {
     let id = 1;
     window.open(`credit/update/${id}`, "_self");
 };
+
+const getCreditCard = () => {
+    axios.get("/api/credits").then((res) => {
+        credit.value = res.data;
+    });
+};
+
+onMounted(() => {
+    getCreditCard();
+});
 </script>
 <template>
     <div class="content-header">

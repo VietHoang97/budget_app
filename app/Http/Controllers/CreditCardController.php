@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CreditCard;
 use Illuminate\Http\Request;
 
 class CreditCardController extends Controller
@@ -13,7 +14,8 @@ class CreditCardController extends Controller
      */
     public function index()
     {
-        //
+        $creditCard = CreditCard::all();
+        return $creditCard;
     }
 
     /**
@@ -34,7 +36,31 @@ class CreditCardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated  = request()->validate([
+            'name' => 'required',
+            'number' => 'required|decimal:2',
+            'limit' => 'required',
+            'due_date' => 'required',
+            'interest_rate' => 'required|decimal:2',
+            'account_id' => 'required'
+        ],[
+            'account_id.required' => 'The Account name field is required.',
+        ]);
+
+        $result = CreditCard::create([
+            'name' => $validated['name'],
+            'number' => $validated['number'],
+            'limit' => $validated['limit'],
+            'due_date' => $validated['due_date'],
+            'interest_rate' => $validated['interest_rate'],
+            'notes' => $request->notes ? $request->notes : ""
+        ]);
+        
+        if($result) {
+            return response()->json(['message' => 'Create account successfully']);
+        } else {
+            return response()->json(['error' => 'Create failed! Please try again later.'], 401);
+        }
     }
 
     /**
@@ -56,7 +82,8 @@ class CreditCardController extends Controller
      */
     public function edit($id)
     {
-        //
+        $creditCard = CreditCard::find($id);
+        return $creditCard;
     }
 
     /**
@@ -68,7 +95,31 @@ class CreditCardController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated  = request()->validate([
+            'name' => 'required',
+            'number' => 'required|decimal:2',
+            'limit' => 'required',
+            'due_date' => 'required',
+            'interest_rate' => 'required|decimal:2',
+            'account_id' => 'required'
+        ],[
+            'account_id.required' => 'The Account name field is required.',
+        ]);
+
+        $result = CreditCard::where('id', $id)->update([
+            'name' => $validated['name'],
+            'number' => $validated['number'],
+            'limit' => $validated['limit'],
+            'due_date' => $validated['due_date'],
+            'interest_rate' => $validated['interest_rate'],
+            'notes' => $request->notes ? $request->notes : ""
+        ]);
+
+        if($result) {
+            return response()->json(['message' => 'Update account successfully']);
+        }else {
+            return response()->json(['error' => 'Update failed! Please try again later.'], 401);
+        }
     }
 
     /**
@@ -79,6 +130,8 @@ class CreditCardController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $creditCard = CreditCard::find($id);
+        $creditCard->delete();
+        return response()->json(['success', true], 200);
     }
 }
