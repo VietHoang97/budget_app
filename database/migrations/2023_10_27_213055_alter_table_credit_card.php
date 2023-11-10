@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('credit_card', function (Blueprint $table) {
-            $table->foreignId('ccard_account_id')->constrained('accounts');
+        Schema::table('credit_cards', function (Blueprint $table) {
+            $table->foreignId('account_id')->constrained('accounts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

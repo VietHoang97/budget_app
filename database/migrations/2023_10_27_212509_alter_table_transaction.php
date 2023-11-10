@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->foreignId('transaction_account_id')->constrained('accounts')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('transaction_category_id')->constrained('categories')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('account_id')->constrained('accounts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('category_id')->constrained('categories')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

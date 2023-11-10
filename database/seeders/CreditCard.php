@@ -4,10 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
 use Illuminate\Support\Facades\DB;
 
-class Accounts extends Seeder
+class CreditCard extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,15 +15,18 @@ class Accounts extends Seeder
      */
     public function run()
     {
-        DB::table('accounts')->insert([
+        DB::table('credit_cards')->insert([
             'id' => 1,
-            'name' => 'Wallet',
-            'currency' => 1,
-            'balance' => 100.00,
-            'init_amount' => 100.00,
+            'account_id' => 1,
+            'number' => 1000,
+            'name' => "Master Card",
+            'limit' => 100,
+            'due_date' => now(),
+            'interest_rate' => 1.5,
             'notes' => '',
             'created_at' => now(),
             'updated_at' => now()
-        ],);
+
+        ]);
     }
 }

@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('schedule_transactions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('transaction_id');
             $table->string('frequency');
             $table->dateTime('next_occurrence');
             $table->string('notes', 255)->nullable();

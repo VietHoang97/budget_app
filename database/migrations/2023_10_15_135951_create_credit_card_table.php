@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('credit_card', function (Blueprint $table) {
+        Schema::create('credit_cards', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('account_id');
             $table->string('number');
             $table->string('name');
             $table->decimal('limit', 10, 2);
+            $table->date('start_date');
             $table->date('due_date');
             $table->decimal('interest_rate', 10, 2);
             $table->string('notes', 255)->nullable();

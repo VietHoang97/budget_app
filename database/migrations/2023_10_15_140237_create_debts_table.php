@@ -19,8 +19,6 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->decimal('interest_rate', 10, 2);
             $table->date('due_date');
-            $table->unsignedInteger('primary_account_id');
-            $table->unsignedInteger('secondary_account_id');
             $table->string('notes', 255)->nullable();
             $table->timestamps();
         });
