@@ -17,8 +17,9 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call([
-            Accounts::class,
-            CreditCard::class,
+            // Accounts::class,
+            // CreditCard::class,
+            Budget::class,
         ]);
     }
 }

@@ -2,6 +2,7 @@
 import { ref, onMounted, onUpdated, reactive } from "vue";
 import { Form } from "vee-validate";
 import FixedButton from "@/components/FixedButton.vue";
+import DeleteModal from "@/components/modalComponents/DeleteModal.vue";
 // import TransferAccount from "@/components/modalComponents/TransferAccount.vue";
 
 const type = { 1: "fa-plus" };
@@ -9,6 +10,9 @@ const className = { 1: "btn-primary" };
 const accLink = ref("/credit/create");
 
 const credit = ref({});
+const isDelClick = ref(false);
+const credit_id = ref();
+const slug = ref("credit-card");
 
 const openUpdate = () => {
     let id = 1;
@@ -19,6 +23,11 @@ const getCreditCard = () => {
     axios.get("/api/credits").then((res) => {
         credit.value = res.data;
     });
+};
+
+const openDeleteForm = (id) => {
+    isDelClick.value = true;
+    credit_id.value = id;
 };
 
 onMounted(() => {
@@ -132,7 +141,10 @@ onMounted(() => {
                                 >
                                     Edit Credit Card
                                 </button>
-                                <button class="dropdown-item" href="#">
+                                <button
+                                    class="dropdown-item"
+                                    @click="openDeleteForm()"
+                                >
                                     Delete Credit Card
                                 </button>
                             </div>
@@ -418,5 +430,8 @@ onMounted(() => {
         :btn="className"
         :form_id="accLink"
     />
+    <template v-if="isDelClick == true">
+        <DeleteModal :pass_id="credit_id" :type="slug" />
+    </template>
     <!-- <TransferAccount /> -->
 </template>

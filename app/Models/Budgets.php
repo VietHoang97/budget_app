@@ -12,4 +12,6 @@ class Budgets extends Model
     protected $fillable = [
         'name', 'amount', 'start_date', 'end_date'
     ];
+
+    protected $guarded = [];
 }

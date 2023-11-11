@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CreditCardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,4 +37,12 @@ Route::prefix('/credits')->group(function() {
     Route::get('/{id}/edit', [CreditCardController::class, 'edit']);
     Route::put('/{id}/edit', [CreditCardController::class, 'update']);
     Route::delete('/{id}', [CreditCardController::class, 'destroy']);
+});
+
+Route::prefix('/budgets')->group(function() {
+    Route::get('/', [BudgetController::class, 'index']);
+    Route::post('/create', [BudgetController::class, 'store']);
+    Route::get('/{id}/edit', [BudgetController::class, 'edit']);
+    Route::put('/{id}/edit', [BudgetController::class, 'update']);
+    Route::delete('/{id}', [BudgetController::class, 'destroy']);
 });
