@@ -1,3 +1,52 @@
+<script setup>
+import { ref, onMounted, computed } from "vue";
+import moment from "moment";
+
+const currentMonth = ref(moment());
+const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const daysInMonth = computed(() => {
+    const days = currentMonth.value.daysInMonth();
+    return Array.from({ length: days }, (_, i) => i + 1);
+});
+
+const previousMonthDays = computed(() => {
+    const firstDayOfMonth = currentMonth.value.startOf("month").format("d");
+    const daysInPrevMonth = currentMonth.value
+        .subtract(1, "month")
+        .daysInMonth();
+    const leadingBlanks = Array.from(
+        { length: parseInt(firstDayOfMonth) },
+        (_, i) => daysInPrevMonth - i
+    );
+    return leadingBlanks.reverse();
+});
+
+const nextMonthDays = computed(() => {
+    const lastDayOfMonth = currentMonth.value.endOf("month").format("d");
+    const leadingBlanks = Array.from(
+        { length: 6 - parseInt(lastDayOfMonth) },
+        (_, i) => i + 1
+    );
+    return leadingBlanks;
+});
+
+const previousMonth = () => {
+    currentMonth.value = moment(currentMonth.value).subtract(1, "month");
+};
+
+const nextMonth = () => {
+    currentMonth.value = moment(currentMonth.value).add(1, "month");
+};
+
+const selectDate = (day) => {
+    alert(
+        `Selected date: ${currentMonth.value.format(
+            "MMMM"
+        )} ${day}, ${currentMonth.value.format("YYYY")}`
+    );
+};
+</script>
 <template>
     <div class="content-header">
         <div class="container-fluid">
@@ -14,117 +63,68 @@
             </div>
         </div>
     </div>
-
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="sticky-top mb-3">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Draggable Events</h4>
-                            </div>
-                            <div class="card-body">
-                                <div id="external-events">
-                                    <div class="external-event bg-success">
-                                        Lunch
-                                    </div>
-                                    <div class="external-event bg-warning">
-                                        Go home
-                                    </div>
-                                    <div class="external-event bg-info">
-                                        Do homework
-                                    </div>
-                                    <div class="external-event bg-primary">
-                                        Work on UI design
-                                    </div>
-                                    <div class="external-event bg-danger">
-                                        Sleep tight
-                                    </div>
-                                    <div class="checkbox">
-                                        <label for="drop-remove">
-                                            <input
-                                                type="checkbox"
-                                                id="drop-remove"
-                                            />
-                                            remove after drop
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Create Event</h3>
-                            </div>
-                            <div class="card-body">
-                                <div
-                                    class="btn-group"
-                                    style="width: 100%; margin-bottom: 10px"
-                                >
-                                    <ul
-                                        class="fc-color-picker"
-                                        id="color-chooser"
-                                    >
-                                        <li>
-                                            <a class="text-primary" href="#"
-                                                ><i class="fas fa-square"></i
-                                            ></a>
-                                        </li>
-                                        <li>
-                                            <a class="text-warning" href="#"
-                                                ><i class="fas fa-square"></i
-                                            ></a>
-                                        </li>
-                                        <li>
-                                            <a class="text-success" href="#"
-                                                ><i class="fas fa-square"></i
-                                            ></a>
-                                        </li>
-                                        <li>
-                                            <a class="text-danger" href="#"
-                                                ><i class="fas fa-square"></i
-                                            ></a>
-                                        </li>
-                                        <li>
-                                            <a class="text-muted" href="#"
-                                                ><i class="fas fa-square"></i
-                                            ></a>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div class="input-group">
-                                    <input
-                                        id="new-event"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder="Event Title"
-                                    />
-                                    <div class="input-group-append">
-                                        <button
-                                            id="add-new-event"
-                                            type="button"
-                                            class="btn btn-primary"
-                                        >
-                                            Add
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="content">
+        <div class="col-md-10 offset-md-1">
+            <div class="card">
+                <div class="d-flex justify-content-between my-2">
+                    <button class="btn" @click="previousMonth">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <h3>{{ currentMonth.format("MMMM YYYY") }}</h3>
+                    <button class="btn" @click="nextMonth">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
-
-                <div class="col-md-9">
-                    <div class="card card-primary">
-                        <div class="card-body p-0">
-                            <div id="calendar"></div>
-                        </div>
+            </div>
+            <div class="card p-3">
+                <div class="days">
+                    <div v-for="day in daysOfWeek" :key="day" class="day">
+                        {{ day }}
+                    </div>
+                    <div
+                        v-for="prevMonthDay in previousMonthDays"
+                        :key="prevMonthDay"
+                        class="day blurred unclickable"
+                    >
+                        {{ prevMonthDay }}
+                    </div>
+                    <div
+                        v-for="day in daysInMonth"
+                        :key="day"
+                        class="day"
+                        @click="selectDate(day)"
+                    >
+                        {{ day }}
+                    </div>
+                    <div
+                        v-for="nextMonthDay in nextMonthDays"
+                        :key="nextMonthDay"
+                        class="day blurred unclickable"
+                    >
+                        {{ nextMonthDay }}
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 </template>
+
+<style scoped>
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+.day {
+    padding: 10px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+.blurred {
+    opacity: 0.5;
+}
+
+.unclickable {
+    pointer-events: none;
+}
+</style>
