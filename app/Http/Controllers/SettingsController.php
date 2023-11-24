@@ -14,7 +14,8 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        //
+        $settings = Settings::all();
+        return $settings;
     }
 
     /**

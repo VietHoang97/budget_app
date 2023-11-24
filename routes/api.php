@@ -2,9 +2,13 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CreditCardController;
+use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use PhpParser\Node\Expr\FuncCall;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +24,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/currencyListquotes', [CurrencyController::class, 'currencyListquotes']);
+Route::get('/currencyConverter/{currency_from}/{currency_to}', [CurrencyController::class, 'currencyConverter']);
 
 
 Route::prefix('/accounts')->group(function () {
@@ -45,4 +52,12 @@ Route::prefix('/budgets')->group(function() {
     Route::get('/{id}/edit', [BudgetController::class, 'edit']);
     Route::put('/{id}/edit', [BudgetController::class, 'update']);
     Route::delete('/{id}', [BudgetController::class, 'destroy']);
+});
+
+Route::prefix('/categories')->group(function () {
+    Route::get('/', [CategoryController::class, 'index']);
+});
+
+Route::prefix('/settings')->group(function() {
+    Route::get('/', [SettingsController::class, 'index']);
 });

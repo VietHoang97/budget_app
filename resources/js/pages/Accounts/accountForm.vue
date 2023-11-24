@@ -8,7 +8,7 @@ const acc_id = ref(route.params.id);
 const editMode = ref(route.params.id ? true : false);
 const currency_arr = ref([]);
 
-let form = reactive({
+const form = reactive({
     currency: 1,
     init_amount: "",
     notes: "",
@@ -65,25 +65,7 @@ const handleSubmit = () => {
 const goBack = () => {
     router.push("/accounts");
 };
-/*
 
-const getExchangeRate = () => {
-    /*
-    http://apilayer.net/api/live
-
-    ? access_key = 05ccc0be7943e856d1c4485d45884edc
-    & currencies = EUR,GBP,CAD,PLN
-    & source = USD
-    & format = 1
-
-    // axios
-    //     .get("/api/currencyListquotes")
-    //     .then((response) => {
-    //         console.log(response.data);
-    //     })
-    //     .catch((error) => {});
-};
-*/
 onMounted(() => {
     getCurrencies();
     if (acc_id.value) {
