@@ -17,11 +17,12 @@ class Budget extends Seeder
     {
         DB::table('budgets')->insert([
             'id' => 1,
-            'name' => "Budget",
+            'category_id' => 1,
+            'account_id' => 1,
             'amount' => 1000,
             'init_amount' => 1000,
             'start_date' => now(),
-            'end_date' => '30/11/2023',
+            'end_date' => '2024-01-31 23:59:59',
             'created_at' => now(),
             'updated_at' => now()
         ]);

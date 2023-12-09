@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CreditCard extends Seeder
+class Category extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,16 +15,10 @@ class CreditCard extends Seeder
      */
     public function run()
     {
-        DB::table('credit_cards')->insert([
+        DB::table('categories')->insert([
             'id' => 1,
-            'account_id' => 1,
-            'number' => 1000,
             'name' => "Master Card",
-            'limit' => 100,
-            'start_date' => now(),
-            'due_date' => now(),
-            'interest_rate' => 1.5,
-            'notes' => '',
+            'icon' => 'https://webapp.fastbudget.app/static/icons/ic_party_hat.svg',
             'created_at' => now(),
             'updated_at' => now()
 

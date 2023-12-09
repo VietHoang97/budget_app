@@ -1,5 +1,28 @@
 <script setup>
-const handleSubmit = () => {};
+import { ref, reactive, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const accounts = ref({});
+const form = reactive({
+    amount: "",
+    category_id: "",
+    account_id: "",
+});
+
+const getBudgets = () => {
+    axios.get(`/api/budgets/${route.params.id}/edit`).then(({ data }) => {
+        form.amount = data.amount;
+        form.category_id = data.category_id;
+        form.account_id = data.account_id;
+    });
+};
+
+const getAccounts = () => {
+    axios.get("/api/accounts").then((res) => {
+        accounts.value = res.data;
+    });
+};
 </script>
 
 <template>

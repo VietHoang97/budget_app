@@ -35,7 +35,7 @@ const createAccount = () => {
         .post("/api/accounts/create", form)
         .then((res) => {
             console.log("create success");
-            // router.push("/accounts");
+            router.push("/accounts");
         })
         .catch((e) => {
             console.log(e);
@@ -48,6 +48,7 @@ const editAccount = () => {
         .put(`/api/accounts/${acc_id.value}/edit`, form)
         .then((res) => {
             console.log("update success");
+            router.push("/accounts");
         })
         .catch((e) => {
             console.log(e);

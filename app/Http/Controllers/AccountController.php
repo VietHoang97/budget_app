@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use Illuminate\Http\Request;
+use App\Helper\Utils;
 
 class AccountController extends Controller
 {
@@ -21,8 +22,12 @@ class AccountController extends Controller
             "{$accounts}.currency",
             "{$accounts}.balance",
             "{$accounts}.init_amount",
-        ])->get();
-        return  $data;
+        ])
+        ->get()->transform(function($item) {
+            $item->balance = Utils::formatHumanMoney($item->balance);
+            return $item;
+        });
+        return $data;
     }
 
     /**
@@ -83,6 +88,7 @@ class AccountController extends Controller
         $result = Account::where('id',$id)->update([
             'currency' => $validated['currency'],
             'init_amount' => $validated['init_amount'],
+            'balance' => $validated['init_amount'],
             'notes' => $request->notes ? $request->notes : ''
         ]);
         if($result) {

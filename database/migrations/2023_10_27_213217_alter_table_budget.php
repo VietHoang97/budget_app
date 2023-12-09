@@ -13,7 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('credit_cards', function (Blueprint $table) {
+        Schema::table('budgets', function (Blueprint $table) {
+            $table->foreignId('category_id')->constrained('categories')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('account_id')->constrained('accounts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
@@ -25,7 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('credit_cards', function (Blueprint $table) {
+        Schema::table('budgets', function (Blueprint $table) {
+            $table->dropForeign('category_id');
             $table->dropForeign('account_id');
         });
     }

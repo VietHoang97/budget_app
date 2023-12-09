@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('budgets', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->decimal('amount', 10, 2);
             $table->decimal('init_amount', 10, 2);
             $table->date('start_date');

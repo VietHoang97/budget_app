@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Budgets;
+use Database\Seeders\Budget;
 use Illuminate\Http\Request;
 
 class BudgetController extends Controller
@@ -13,7 +15,8 @@ class BudgetController extends Controller
      */
     public function index()
     {
-        //
+        $budgets = Budgets::all();
+        return $budgets;
     }
 
     /**
@@ -56,7 +59,8 @@ class BudgetController extends Controller
      */
     public function edit($id)
     {
-        //
+        $budget = Budgets::find($id);
+        return $budget;
     }
 
     /**
